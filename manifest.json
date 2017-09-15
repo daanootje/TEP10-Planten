@@ -1,0 +1,7 @@
+{
+  "name": "TEP10-Planten",
+  "short_name": "TEP10-Planten",
+  "description": "Planten application",
+  "start_url": "/",
+  "display": "standalone"
+}
