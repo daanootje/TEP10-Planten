@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 public interface LeveranciersApi {
 
     @RequestMapping(path = "{levcode}", method = RequestMethod.GET)
-//    ResponseEntity<Leverancier> getLeverancier(@PathVariable(required = false) String levcode); // throws ChangeSetPersister.NotFoundException;
-    String getLeverancier(@PathVariable String levcode); // throws ChangeSetPersister.NotFoundException;
+    ResponseEntity<Leverancier> getLeverancier(@PathVariable Long levcode); // throws ChangeSetPersister.NotFoundException;
 
 }
