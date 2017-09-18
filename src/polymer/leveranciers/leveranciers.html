@@ -2,12 +2,13 @@
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../api/leveranciers.html">
+<link rel="import" href="../quantity-element/quantity-element.html">
 
 <dom-module id="leveranciers-element">
   <template>
     <iron-ajax
     auto
-    url='[[apiCall]]'
+    url='[[apiUrl]]'
     params=''
     handle-as="json"
     on-response="handleLeveranciersResponse"
@@ -33,12 +34,24 @@
 
     <table style="width:100%">
       <tr>
-        <th>Name</th>
+        <th>Code</th>
+        <th>Naam</th>
+        <th>Adres</th>
+        <th>Woonplaats</th>
       </tr>
       <template is="dom-repeat" items="[[leveranciers]]">
         <tr>
           <td class="table-data-column">
-            [[item.name]]
+            [[item.levcode]]
+          </td>
+          <td class="table-data-column">
+            [[item.levnaam]]
+          </td>
+          <td class="table-data-column">
+            [[item.adres]]
+          </td>
+          <td class="table-data-column">
+            [[item.woonplaats]]
           </td>
           <td class="table-action-column">
             <paper-button class="table-button" raised>Bestellingen</paper-button>
@@ -62,21 +75,13 @@
             type: String,
             value: 'leveranciers-element'
           },
-          apiCall: {
+          apiUrl: {
             type: Object,
-            value: leveranciersApi.byLevCode(4)
+            value: leveranciersApi.getAll
           },
           leveranciers: {
             type: Array,
-            value: [
-              {name: "1"},
-              {name: "1"},
-              {name: "1"},
-              {name: "1"},
-              {name: "1"},
-              {name: "1"},
-              {name: "1"}
-            ]
+            value: []
           },
           columns: {
             type: Array,
@@ -88,16 +93,7 @@
       }
 
       handleLeveranciersResponse(response) {
-        this.leveranciers = response.detail.response;
-        this.leveranciers = [
-          {name: "2"},
-          {name: "2"},
-          {name: "2"},
-          {name: "1"},
-          {name: "1"},
-          {name: "1"},
-          {name: "1"}
-        ];
+        this.leveranciers = response.detail.response
       }
     }
 

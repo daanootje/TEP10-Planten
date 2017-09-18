@@ -1,0 +1,49 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="quantity-element">
+  <template>
+    <iron-ajax
+    auto
+    url='[[apiUrl]]'
+    params=''
+    handle-as="json"
+    on-response="handleResponse"
+    debounce-duration="300"></iron-ajax>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <p>Quantity: [[quantity]]</p>
+
+  </template>
+
+  <script>
+
+    class QuantityElement extends Polymer.Element {
+      static get is() { return 'quantity-element'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'leveranciers-element'
+          },
+          apiUrl: String,
+          quantity: {
+            type: Number,
+            value: 0
+          }
+        };
+      }
+
+      handleResponse(response) {
+        console.log(response);
+        this.quantity = response.detail.response;
+      }
+    }
+
+    window.customElements.define(QuantityElement.is, QuantityElement);
+  </script>
+</dom-module>
