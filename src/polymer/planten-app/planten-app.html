@@ -1,13 +1,17 @@
-<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../leveranciers/leveranciers.html">
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
 
 <dom-module id="planten-app">
   <template>
     <style>
       :host {
         display: block;
+        font-family: 'Source Sans Pro', sans-serif;
       }
     </style>
-    <h2>Hello [[prop1]]!</h2>
+    <h2>Plantendatabase</h2>
+    <leveranciers-element></leveranciers-element>
   </template>
 
   <script>
@@ -16,6 +20,7 @@
      * @polymer
      */
     class PlantenApp extends Polymer.Element {
+
       static get is() { return 'planten-app'; }
       static get properties() {
         return {
