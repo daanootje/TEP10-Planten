@@ -1,4 +1,5 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../leveranciers/leveranciers.html">
 
 <dom-module id="planten-app">
   <template>
@@ -8,9 +9,9 @@
       }
     </style>
     <h2>Hello [[prop1]]!</h2>
+    <leveranciers-element></leveranciers-element>
   </template>
 
-  <script src="../services/leverancier-service.js"></script>
   <script>
     /**
      * @customElement
@@ -20,8 +21,6 @@
 
       static get is() { return 'planten-app'; }
       static get properties() {
-        var svc = new LeverancierService();
-        svc.getLeveranciers();
         return {
           prop1: {
             type: String,

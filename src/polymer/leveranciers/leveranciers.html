@@ -1,0 +1,60 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../api/leveranciers.html">
+
+<dom-module id="leveranciers-element">
+  <template>
+    <iron-ajax
+    auto
+    url='[[api.getAll]]'
+    params=''
+    handle-as="json"
+    on-response="handleLeveranciersResponse"
+    debounce-duration="300"></iron-ajax>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <template is="dom-repeat" items="{{leveranciers}}">
+        <div>{{item.name}}</p>
+    </template>
+  </template>
+
+  <script>
+
+    class LeveranciersElement extends Polymer.Element {
+      static get is() { return 'leveranciers-element'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'leveranciers-element'
+          },
+          api: {
+            type: Object,
+            value: leveranciersApi
+          },
+          leveranciers: {
+            type: Array,
+            value: [
+              {name: "1"},
+              {name: "1"},
+              {name: "1"},
+              {name: "1"},
+              {name: "1"},
+              {name: "1"},
+              {name: "1"}
+            ]
+          }
+        };
+      }
+
+      handleLeveranciersResponse(response) {
+        console.log(response);
+      }
+    }
+
+    window.customElements.define(LeveranciersElement.is, LeveranciersElement);
+  </script>
+</dom-module>
