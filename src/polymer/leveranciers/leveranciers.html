@@ -3,6 +3,7 @@
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../api/leveranciers.html">
 <link rel="import" href="../quantity-element/quantity-element.html">
+<link rel="import" href="../bestellingen-element/bestellingen-element.html">
 
 <dom-module id="leveranciers-element">
   <template>
@@ -39,27 +40,32 @@
         <th>Adres</th>
         <th>Woonplaats</th>
       </tr>
-      <template is="dom-repeat" items="[[leveranciers]]">
+      <template is="dom-repeat" items="{{leveranciers}}">
         <tr>
           <td class="table-data-column">
-            [[item.levcode]]
+            [[item.leverancier.levcode]]
           </td>
           <td class="table-data-column">
-            [[item.levnaam]]
+            [[item.leverancier.levnaam]]
           </td>
           <td class="table-data-column">
-            [[item.adres]]
+            [[item.leverancier.adres]]
           </td>
           <td class="table-data-column">
-            [[item.woonplaats]]
+            [[item.leverancier.woonplaats]]
           </td>
           <td class="table-action-column">
-            <paper-button class="table-button" raised>Bestellingen</paper-button>
+            <paper-button id="{{index}}" class="table-button" on-tap="bestellingTapped" raised>Bestellingen</paper-button>
           </td>
           <td class="table-action-column">
             <paper-button class="table-button" raised>Offertes</paper-button>
           </td>
         </tr>
+
+        <template is="dom-if" if="{{item.openBestelling}}">
+          <bestellingen-element></bestellingen-element>
+        </template>
+
       </template>
     </table>
 
@@ -82,18 +88,34 @@
           leveranciers: {
             type: Array,
             value: []
-          },
-          columns: {
-            type: Array,
-            valye: [
-              {title: "asdf", number: false, column: "name", hidden: false}
-            ]
           }
         };
       }
 
       handleLeveranciersResponse(response) {
-        this.leveranciers = response.detail.response
+        this.leveranciers = response.detail.response.map(lev => {
+          return {
+            leverancier: lev,
+            openBestelling: false
+          }
+        })
+      }
+
+      bestellingTapped(e) {
+        var leverancier = this.leveranciers[e.path[0].id];
+        var index = e.path[0].id;
+        leverancier.openBestelling = !leverancier.openBestelling;
+        var lev = this.leveranciers;
+
+        var newObject = [];
+        for(var i = 0; i < this.leveranciers.length; i++) {
+          newObject.push({
+            "leverancier": this.leveranciers[i].leverancier,
+            "openBestelling": this.leveranciers[i].openBestelling
+          });
+        }
+
+        this.set('leveranciers', newObject)
       }
     }
 

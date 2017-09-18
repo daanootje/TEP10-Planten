@@ -1,0 +1,68 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../api/leveranciers.html">
+<link rel="import" href="../quantity-element/quantity-element.html">
+
+<dom-module id="bestellingen-element">
+  <template>
+    <iron-ajax
+    auto
+    url='[[apiUrl]]'
+    params=''
+    handle-as="json"
+    on-response="handleResponse"
+    debounce-duration="300"></iron-ajax>
+    <style>
+      :host {
+        display: flex;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    </style>
+
+    <table style="width:100%">
+      <tr>
+        <th>Naam</th>
+      </tr>
+      <template is="dom-repeat" items="[[bestellingen]]">
+        <tr>
+          <td class="table-data-column">
+            [[item.name]]
+          </td>
+        </tr>
+      </template>
+    </table>
+
+  </template>
+
+  <script>
+
+    class BestellingenElement extends Polymer.Element {
+      static get is() { return 'bestellingen-element'; }
+      static get properties() {
+        return {
+          apiUrl: {
+            type: Object,
+            value: "adsfasdf"
+          },
+          bestellingen: {
+            type: Array,
+            value: [
+              {name: "1"},
+              {name: "1"},
+              {name: "1"},
+              {name: "1"}
+            ]
+          }
+        };
+      }
+
+      handleLeveranciersResponse(response) {
+        this.leveranciers = response.detail.response
+      }
+    }
+
+    window.customElements.define(BestellingenElement.is, BestellingenElement);
+  </script>
+</dom-module>
