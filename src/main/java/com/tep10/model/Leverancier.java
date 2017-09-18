@@ -4,10 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by UG34QP on 18-9-2017.
@@ -27,6 +26,14 @@ public class Leverancier {
     private String adres;
     @Column
     private String woonplaats;
+
+    @OneToMany
+    @JoinColumn(name = "bestellingen_levcode")
+    private List<Bestelling> bestellingen = new ArrayList<>();
+
+    @OneToMany
+    @JoinColumn(name = "offertes_levcode")
+    private List<Offerte> offertes = new ArrayList<>();
 
     public Leverancier () {
     }

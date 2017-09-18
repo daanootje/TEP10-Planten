@@ -5,35 +5,33 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.sql.Date;
 
 /**
  * Created by UG34QP on 18-9-2017.
  */
 @Entity
-@Table(name = "goed_ontvangst")
+@Table(name = "offertes")
 @Builder
 @AllArgsConstructor
 @Data
-public class GoedOntvangst {
+public class Offerte {
     @Id
-    private Long bestelnr;
+    private Long levcode;
     @Id
     private Long artcode;
-    @Id
-    private Date ontv_datum;
     @Column
-    private Long ontv_aantal;
+    private String artcodelev;
     @Column
-    private String status;
+    private Long levtijd;
     @Column
-    private Long boekstuk;
-    @Column
-    private Long vlgnr;
+    private Float offprijs;
 
     @ManyToOne(optional = false)
-    BestelRegel bestelRegel;
+    private Plant plant;
 
-    public GoedOntvangst () {
+    @ManyToOne(optional = false)
+    private Leverancier leverancier;
+
+    public Offerte () {
     }
 }
