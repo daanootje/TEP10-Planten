@@ -1,12 +1,13 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../api/leveranciers.html">
 
 <dom-module id="leveranciers-element">
   <template>
     <iron-ajax
     auto
-    url='[[api.getAll]]'
+    url='[[apiCall]]'
     params=''
     handle-as="json"
     on-response="handleLeveranciersResponse"
@@ -15,10 +16,40 @@
       :host {
         display: block;
       }
+      .table-data-column {
+        text-align: center;
+      }
+      .table-action-column {
+        width: 150px;
+      }
+      .table-button {
+        display: flex;
+        margin-left: auto;
+        margin-right: auto;
+      }
     </style>
-    <template is="dom-repeat" items="{{leveranciers}}">
-        <div>{{item.name}}</p>
-    </template>
+
+    <h3>Leveranciers</h3>
+
+    <table style="width:100%">
+      <tr>
+        <th>Name</th>
+      </tr>
+      <template is="dom-repeat" items="[[leveranciers]]">
+        <tr>
+          <td class="table-data-column">
+            [[item.name]]
+          </td>
+          <td class="table-action-column">
+            <paper-button class="table-button" raised>Bestellingen</paper-button>
+          </td>
+          <td class="table-action-column">
+            <paper-button class="table-button" raised>Offertes</paper-button>
+          </td>
+        </tr>
+      </template>
+    </table>
+
   </template>
 
   <script>
@@ -31,9 +62,9 @@
             type: String,
             value: 'leveranciers-element'
           },
-          api: {
+          apiCall: {
             type: Object,
-            value: leveranciersApi
+            value: leveranciersApi.byLevCode(4)
           },
           leveranciers: {
             type: Array,
@@ -46,12 +77,27 @@
               {name: "1"},
               {name: "1"}
             ]
+          },
+          columns: {
+            type: Array,
+            valye: [
+              {title: "asdf", number: false, column: "name", hidden: false}
+            ]
           }
         };
       }
 
       handleLeveranciersResponse(response) {
-        console.log(response);
+        this.leveranciers = response.detail.response;
+        this.leveranciers = [
+          {name: "2"},
+          {name: "2"},
+          {name: "2"},
+          {name: "1"},
+          {name: "1"},
+          {name: "1"},
+          {name: "1"}
+        ];
       }
     }
 

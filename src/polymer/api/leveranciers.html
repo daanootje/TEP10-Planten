@@ -2,6 +2,9 @@
 
 <script>
   var leveranciersApi = {
-    getAll: config.apiUrl + "/all"
+    getAll: config.apiUrl + "/all",
+    byLevCode(levCode){
+      return config.apiUrl + "/leveranciers/" + levCode;
+    }
   }
 </script>
