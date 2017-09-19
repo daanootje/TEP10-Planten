@@ -1,5 +1,6 @@
 package com.tep10.model;
 
+import com.tep10.model.compositeKeys.BestelRegelCompositeKey;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,7 @@ import java.util.List;
  * Created by UG34QP on 18-9-2017.
  */
 @Entity
+@IdClass(BestelRegelCompositeKey.class)
 @Table(name = "bestelregels")
 @Builder
 @AllArgsConstructor
@@ -29,9 +31,9 @@ public class BestelRegel {
     @ManyToOne(optional = false)
     private Bestelling bestelling;
 
-    @OneToMany
-    @JoinColumn(name = "goed_ontvangst_bestelnr")
-    private List<GoedOntvangst> goedOntvangsten = new ArrayList<>();
+//    @OneToMany
+//    @JoinColumn(name = "goed__ontvangst_bestelnr")
+//    private List<GoedOntvangst> goedOntvangsten = new ArrayList<>();
 
     @ManyToOne(optional = false)
     private Plant plant;
