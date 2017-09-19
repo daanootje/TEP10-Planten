@@ -14,16 +14,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+
+import javax.xml.ws.Response;
 import java.util.List;
 
 /**
  * Created by UG34QP on 18-9-2017.
  */
 @RestController
+@CrossOrigin("http://localhost:8081")
 public class Leveranciers implements LeveranciersApi{
 
     private static final Logger log = LoggerFactory.getLogger(Leveranciers.class);
@@ -53,7 +54,7 @@ public class Leveranciers implements LeveranciersApi{
     }
 
     public ResponseEntity<List<Bestelling>> getBestellingenFromLeverancier(@PathVariable Long levcode) {
-        List<Bestelling> bestellingen = bestellingJPA.findBestellingByLevcode(levcode);
+        List<Bestelling> bestellingen = leverancierJPA.findLeverancierByLevcode(levcode).getBestellingen();
         return checkNotNull(bestellingen);
     }
 
@@ -64,6 +65,5 @@ public class Leveranciers implements LeveranciersApi{
             return new ResponseEntity<>(object, HttpStatus.OK);
         }
     }
-
 
 }

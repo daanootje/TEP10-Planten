@@ -13,7 +13,7 @@ import java.sql.Date;
  */
 @Entity
 @IdClass(GoedOntvangstCompositeKey.class)
-@Table(name = "goed_ontvangst")
+@Table(name = "goedontvangst")
 @Builder
 @AllArgsConstructor
 @Data

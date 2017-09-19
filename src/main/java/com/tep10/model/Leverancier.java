@@ -27,8 +27,7 @@ public class Leverancier {
     @Column
     private String woonplaats;
 
-    @OneToMany
-    @JoinColumn(name = "bestellingen_levcode")
+    @OneToMany(cascade=CascadeType.ALL, mappedBy="levcode")
     private List<Bestelling> bestellingen = new ArrayList<>();
 
     @OneToMany

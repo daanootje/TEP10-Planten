@@ -1,37 +1,51 @@
-<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../leveranciers/leveranciers.html">
+<link rel="import" href="../bestellingen-element/bestellingen-element.html">
 <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+<link rel="import" href="../../../bower_components/iron-pages/iron-pages.html">
 
 <dom-module id="planten-app">
+
   <template>
     <style>
       :host {
         display: block;
         font-family: 'Source Sans Pro', sans-serif;
       }
+      h1 {
+        color: white;
+        text-shadow: 1px 2px 5px black;
+        text-align: center;
+      }
     </style>
-    <h2>Plantendatabase</h2>
-    <leveranciers-element></leveranciers-element>
+
+    <app-location route="/asdfasdf"></app-location>
+
+    <app-route
+    route="{{route}}"
+    pattern="/:view"
+    data="{{route.routeData}}"
+    tail="{{route.path}}"></app-route>
+
+    <h1>Plantenlust</h1>
+    
+    <leveranciers-element name="leveranciers" route={{route}}></leveranciers-element>
   </template>
 
   <script>
-    /**
-     * @customElement
-     * @polymer
-     */
-    class PlantenApp extends Polymer.Element {
-
-      static get is() { return 'planten-app'; }
-      static get properties() {
-        return {
-          prop1: {
-            type: String,
-            value: 'planten-app'
+    Polymer({
+        /* this is the element's prototype */
+        is: 'planten-app',
+        properties: {
+          route: {
+            type: Object,
+            value: {
+              routeData: {},
+              view: "leveranciers",
+              path: "/leveranciers"
+            }
           }
-        };
-      }
-    }
-
-    window.customElements.define(PlantenApp.is, PlantenApp);
+        }
+      });
   </script>
 </dom-module>
