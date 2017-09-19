@@ -1,8 +1,11 @@
-<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../leveranciers/leveranciers.html">
+<link rel="import" href="../bestellingen-element/bestellingen-element.html">
 <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+<link rel="import" href="../../../bower_components/iron-pages/iron-pages.html">
 
 <dom-module id="planten-app">
+
   <template>
     <style>
       :host {
@@ -10,28 +13,64 @@
         font-family: 'Source Sans Pro', sans-serif;
       }
     </style>
-    <h2>Plantendatabase</h2>
-    <leveranciers-element></leveranciers-element>
+
+    <app-location route="{{route}}"></app-location>
+
+    <app-route
+    route="{{route}}"
+    pattern="/:view"
+    data="{{routeData}}"
+    tail="{{subroute}}"></app-route>
+
+    <iron-pages selected="[[routeData.view]]" attr-for-selected="name">
+      <leveranciers-element name="leveranciers" route={{routeData}}></leveranciers-element>
+      <bestellingen-element name="bestellingen" route="{{routeData}}"></bestellingen-element>
+    </iron-pages>
   </template>
 
   <script>
-    /**
-     * @customElement
-     * @polymer
-     */
-    class PlantenApp extends Polymer.Element {
+    Polymer({
+        /* this is the element's prototype */
+        is: 'planten-app',
+        properties: {
+          _routePageChanged(page) {
+            console.log(page);
+            // If no page was found in the route data, page will be an empty string.
+            // Deault to 'view1' in that case.
+            this.page = page || 'leveranciers';
 
-      static get is() { return 'planten-app'; }
-      static get properties() {
-        return {
-          prop1: {
+            // Close a non-persistent drawer when the page & route are changed.
+            if (!this.$.drawer.persistent) {
+              this.$.drawer.close();
+            }
+          },
+
+          _pageChanged(page) {
+            console.log(page);
+            // If no page was found in the route data, page will be an empty string.
+            // Deault to 'view1' in that case.
+            this.page = page || 'leveranciers';
+
+            // Close a non-persistent drawer when the page & route are changed.
+            if (!this.$.drawer.persistent) {
+              this.$.drawer.close();
+            }
+          },
+
+          page: {
             type: String,
-            value: 'planten-app'
-          }
-        };
-      }
-    }
+            reflectToAttribute: true,
+            observer: '_pageChanged',
+          },
 
-    window.customElements.define(PlantenApp.is, PlantenApp);
+          routeData: {
+            type: Object,
+            value: {
+              view: "leveranciers"
+            }
+          },
+          subroute: String
+        }
+      });
   </script>
 </dom-module>

@@ -1,9 +1,11 @@
-<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../api/leveranciers.html">
 <link rel="import" href="../quantity-element/quantity-element.html">
 <link rel="import" href="../bestellingen-element/bestellingen-element.html">
+<link rel="import" href="../../../bower_components/paper-datatable/paper-datatable.html">
+<link rel="import" href="../../../bower_components/d2l-button/d2l-button.html">
 
 <dom-module id="leveranciers-element">
   <template>
@@ -33,92 +35,54 @@
 
     <h3>Leveranciers</h3>
 
-    <table style="width:100%">
-      <tr>
-        <th>Code</th>
-        <th>Naam</th>
-        <th>Adres</th>
-        <th>Woonplaats</th>
-      </tr>
-      <template is="dom-repeat" items="{{leveranciers}}">
-        <tr>
-          <td class="table-data-column">
-            [[item.leverancier.levcode]]
-          </td>
-          <td class="table-data-column">
-            [[item.leverancier.levnaam]]
-          </td>
-          <td class="table-data-column">
-            [[item.leverancier.adres]]
-          </td>
-          <td class="table-data-column">
-            [[item.leverancier.woonplaats]]
-          </td>
-          <td class="table-action-column">
-            <paper-button id="{{index}}" class="table-button" on-tap="bestellingTapped" raised>Bestellingen</paper-button>
-          </td>
-          <td class="table-action-column">
-            <paper-button class="table-button" raised>Offertes</paper-button>
-          </td>
-        </tr>
+    <paper-datatable id="datatable1" data="{{leveranciers}}">
+        <paper-datatable-column header="Code" property="levcode" sortable>
+        </paper-datatable-column>
+        <paper-datatable-column header="Naam" property="levnaam" sortable>
+        </paper-datatable-column>
+        <paper-datatable-column header="Adres" property="adres" sortable>
+        </paper-datatable-column>
+        <paper-datatable-column header="Woonplaats" property="woonplaats" sortable>
+        </paper-datatable-column>
+        <paper-datatable-column header="Action" sortable>
+          <template>
+               <d2l-button>Bestellingen</d2l-button>
+          </template>
+        </paper-datatable-column>
+    </paper-datatable>
 
-        <template is="dom-if" if="{{item.openBestelling}}">
-          <bestellingen-element></bestellingen-element>
-        </template>
-
-      </template>
-    </table>
+    <h3>a {{route.path}}</h3>
 
   </template>
 
   <script>
-
-    class LeveranciersElement extends Polymer.Element {
-      static get is() { return 'leveranciers-element'; }
-      static get properties() {
-        return {
-          prop1: {
-            type: String,
-            value: 'leveranciers-element'
-          },
-          apiUrl: {
-            type: Object,
-            value: leveranciersApi.getAll
-          },
-          leveranciers: {
-            type: Array,
-            value: []
-          }
-        };
-      }
-
-      handleLeveranciersResponse(response) {
-        this.leveranciers = response.detail.response.map(lev => {
-          return {
-            leverancier: lev,
-            openBestelling: false
-          }
-        })
-      }
-
-      bestellingTapped(e) {
-        var leverancier = this.leveranciers[e.path[0].id];
-        var index = e.path[0].id;
-        leverancier.openBestelling = !leverancier.openBestelling;
-        var lev = this.leveranciers;
-
-        var newObject = [];
-        for(var i = 0; i < this.leveranciers.length; i++) {
-          newObject.push({
-            "leverancier": this.leveranciers[i].leverancier,
-            "openBestelling": this.leveranciers[i].openBestelling
-          });
+    Polymer({
+      is: 'leveranciers-element',
+      properties: {
+        apiUrl: {
+          type: Object,
+          value: leveranciersApi.getAll
+        },
+        leveranciers: {
+          type: Array,
+          value: [
+            {levcode: "bla", bla: "adf"}
+          ]
         }
-
-        this.set('leveranciers', newObject)
+      },
+      handleLeveranciersResponse(response) {
+        this.leveranciers = response.detail.response.content;
+      },
+      bestellingTapped(forItem) {
+        this.set('route.view', 'bestellingen');
+      },
+      listeners: {
+        'row-tap': 'handleRowTap'
+      },
+      handleRowTap(e) {
+        this.bestellingTapped(e.detail.item)
       }
-    }
+    })
 
-    window.customElements.define(LeveranciersElement.is, LeveranciersElement);
   </script>
 </dom-module>

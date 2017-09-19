@@ -1,4 +1,4 @@
-<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
 
 <dom-module id="quantity-element">
@@ -22,14 +22,10 @@
 
   <script>
 
-    class QuantityElement extends Polymer.Element {
+    class QuantityElement extends Polymer {
       static get is() { return 'quantity-element'; }
       static get properties() {
         return {
-          prop1: {
-            type: String,
-            value: 'leveranciers-element'
-          },
           apiUrl: String,
           quantity: {
             type: Number,
