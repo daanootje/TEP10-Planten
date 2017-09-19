@@ -27,14 +27,11 @@ public class Leverancier {
     @Column
     private String woonplaats;
 
-    @OneToMany
-    @JoinColumn(name = "bestellingen_levcode")
-    private List<Bestelling> bestellingen = new ArrayList<>();
+//    @OneToMany(mappedBy = "leverancier")
+//    private List<Bestelling> bestellingen = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "leverancier")
+//    private List<Offerte> offertes = new ArrayList<>();
 
-    @OneToMany
-    @JoinColumn(name = "offertes_levcode")
-    private List<Offerte> offertes = new ArrayList<>();
-
-    public Leverancier () {
-    }
+    public Leverancier () {}
 }
