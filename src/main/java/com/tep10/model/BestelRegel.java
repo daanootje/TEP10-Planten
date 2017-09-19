@@ -32,7 +32,7 @@ public class BestelRegel {
     private Bestelling bestelling;
 
 //    @OneToMany
-//    @JoinColumn(name = "goed__ontvangst_bestelnr")
+//    @JoinColumn(name = "goedontvangst_bestelnr")
 //    private List<GoedOntvangst> goedOntvangsten = new ArrayList<>();
 
     @ManyToOne(optional = false)

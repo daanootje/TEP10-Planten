@@ -1,0 +1,54 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../leverancier-actions/leverancier-actions.html">
+
+<dom-module id="sub-container">
+
+  <template>
+    <style>
+      :host {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        margin: 30px;
+      }
+    </style>
+
+    <leverancier-actions leverancier=[[levnaam]] on-show-bestelling="showBestellingTapped"></leverancier-actions>
+    <template is="dom-if" if="[[showBestelling]]">
+      <iron-ajax
+      auto
+      url='http://localhost:8080/leveranciers/[[levcode]]/bestellingen'
+      params=''
+      handle-as="json"
+      on-response="handleBestellingResponse"
+      debounce-duration="300"></iron-ajax>
+      <bestellingen-element
+        bestellingen=[[bestellingen]]
+        levnaam=[[levnaam]]
+        class="bestellingen">
+      </bestellingen-element>
+    </template>
+
+  </template>
+
+  <script>
+    Polymer({
+        is: 'sub-container',
+        properties: {
+          levnaam: String,
+          levcode: Number,
+          bestellinge: Array,
+          showBestelling: Boolean
+        },
+        handleBestellingResponse(response) {
+          this.bestellingen = response.detail.response;
+        },
+        showBestellingTapped(e) {
+          this.showBestelling = !this.showBestelling;
+        },
+        listeners: {
+          'show-bestelling-changed': 'showBestellingTapped'
+        },
+      });
+  </script>
+</dom-module>

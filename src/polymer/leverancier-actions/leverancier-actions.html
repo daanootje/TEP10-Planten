@@ -1,0 +1,40 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+
+<dom-module id="leverancier-actions">
+
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .action-button{
+        margin: 30px;
+      }
+    </style>
+
+    <paper-card heading="[[leverancier]]">
+      <paper-button class="action-button" raised on-tap="tappedBestellingen">Bestellingen</paper-button>
+      <paper-button class="action-button" raised on-tap="tappedOffertes">Offertes</paper-button>
+    <paper-card>
+
+  </template>
+
+  <script>
+    Polymer({
+        /* this is the element's prototype */
+        is: 'leverancier-actions',
+        properties: {
+        },
+        tappedBestellingen() {
+          this.set('showBestellingen', true);
+          this.set('showOffertes', false);
+          this.fire('show-bestelling');
+        },
+        tappedOffertes() {
+          this.set('showOffertes', true);
+          this.set('showBestellingen', false);
+        }
+      });
+  </script>
+</dom-module>

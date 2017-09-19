@@ -1,106 +1,135 @@
-<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../api/leveranciers.html">
+<link rel="import" href="../quantity-element/quantity-element.html">
+<link rel="import" href="../bestellingen-element/bestellingen-element.html">
+<link rel="import" href="../../../bower_components/paper-datatable/paper-datatable.html">
+<link rel="import" href="../../../bower_components/d2l-button/d2l-button.html">
+<link rel="import" href="../../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../sub-container/sub-container.html">
 
 <dom-module id="leveranciers-element">
   <template>
     <iron-ajax
     auto
-    url='[[apiCall]]'
+    url='[[apiUrl]]'
     params=''
     handle-as="json"
     on-response="handleLeveranciersResponse"
     debounce-duration="300"></iron-ajax>
     <style>
       :host {
-        display: block;
-      }
-      .table-data-column {
-        text-align: center;
-      }
-      .table-action-column {
-        width: 150px;
-      }
-      .table-button {
         display: flex;
-        margin-left: auto;
-        margin-right: auto;
+        flex-wrap: wrap;
+        margin: 30px;
+      }
+      .leveranciers {
+        width: 50%;
+        overflow: hidden;
+      }
+      .banner: {
+        width: 25%;
+        clip: rect(0px,60px,200px,0px);
+        overflow: hidden;
+      }
+      .leveranciers-content {
+      }
+      .bestellingen{
+        margin: 30px;
       }
     </style>
 
-    <h3>Leveranciers</h3>
+    <paper-card class="leveranciers">
+      <div class="banner">
+        <img src="../resources/images/young_plants_banner_shorter.jpg"/>
+      </div>
+      <div class="card-content leveranciers-content">
+        <paper-datatable id="datatable1" data="{{leveranciers}}">
+            <paper-datatable-column cell-style="color:gray;" header="Code" property="levcode" sortable>
+            </paper-datatable-column>
+            <paper-datatable-column header="Naam" property="levnaam" sortable>
+            </paper-datatable-column>
+            <paper-datatable-column header="Adres" property="adres" sortable>
+            </paper-datatable-column>
+            <paper-datatable-column header="Woonplaats" property="woonplaats" sortable>
+            </paper-datatable-column>
+        </paper-datatable>
+      </div>
+      <div class="card-actions" style="display: flex;">
+        <paper-button on-tap="previousLeveranciers" raised style="margin: 10px;">previous</paper-button>
+        <paper-button on-tap="nextLeveranciers" raised style="margin: 10px;">next</paper-button>
+      </div>
+    </paper-card>
 
-    <table style="width:100%">
-      <tr>
-        <th>Name</th>
-      </tr>
-      <template is="dom-repeat" items="[[leveranciers]]">
-        <tr>
-          <td class="table-data-column">
-            [[item.name]]
-          </td>
-          <td class="table-action-column">
-            <paper-button class="table-button" raised>Bestellingen</paper-button>
-          </td>
-          <td class="table-action-column">
-            <paper-button class="table-button" raised>Offertes</paper-button>
-          </td>
-        </tr>
-      </template>
-    </table>
+    <template is="dom-if" if="[[showActions]]">
+      <sub-container levnaam=[[selection.levnaam]] levcode=[[selection.levcode]]></sub-container>
+    </template>
 
   </template>
 
   <script>
-
-    class LeveranciersElement extends Polymer.Element {
-      static get is() { return 'leveranciers-element'; }
-      static get properties() {
-        return {
-          prop1: {
-            type: String,
-            value: 'leveranciers-element'
-          },
-          apiCall: {
-            type: Object,
-            value: leveranciersApi.byLevCode(4)
-          },
-          leveranciers: {
-            type: Array,
-            value: [
-              {name: "1"},
-              {name: "1"},
-              {name: "1"},
-              {name: "1"},
-              {name: "1"},
-              {name: "1"},
-              {name: "1"}
-            ]
-          },
-          columns: {
-            type: Array,
-            valye: [
-              {title: "asdf", number: false, column: "name", hidden: false}
-            ]
-          }
-        };
-      }
-
+    Polymer({
+      is: 'leveranciers-element',
+      properties: {
+        apiUrl: {
+          type: Object,
+          value: leveranciersApi.getAll
+        },
+        leveranciers: {
+          type: Array,
+          value: []
+        },
+        showActions: {
+          type: Boolean,
+          value: false
+        },
+        selection: Object,
+        lastPage: {
+          type: Boolean,
+          value: false
+        },
+        page: {
+          type: Number,
+          value: 0
+        },
+        size: {
+          type: Number,
+          value: 5
+        }
+      },
       handleLeveranciersResponse(response) {
-        this.leveranciers = response.detail.response;
-        this.leveranciers = [
-          {name: "2"},
-          {name: "2"},
-          {name: "2"},
-          {name: "1"},
-          {name: "1"},
-          {name: "1"},
-          {name: "1"}
-        ];
+        this.leveranciers = response.detail.response.content.map((lev) => {
+          lev.levnaam = this.capitalizeFirstLetter(lev.levnaam.toLowerCase());
+          lev.woonplaats = this.capitalizeFirstLetter(lev.woonplaats.toLowerCase());
+          lev.adres = this.capitalizeFirstLetter(lev.adres.toLowerCase());
+          return lev;
+        });
+        this.lastPage = response.detail.response.last;
+      },
+      listeners: {
+        'row-tap': 'handleRowTap'
+      },
+      handleRowTap(e) {
+        this.selection = e.detail.item;
+        this.showActions = true;
+      },
+      capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      },
+      nextLeveranciers() {
+        if(!this.lastPage){
+          this.page++;
+          this.apiUrl = leveranciersApi.getAll + "?page=" + this.page + "&size=" + this.size;
+        }
+      },
+      previousLeveranciers() {
+        this.page = Math.max(0, this.page - 1);
+        this.apiUrl = leveranciersApi.getAll + "?page=" + this.page + "&size=" + this.size;
       }
-    }
+    })
 
-    window.customElements.define(LeveranciersElement.is, LeveranciersElement);
   </script>
 </dom-module>
