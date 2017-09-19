@@ -1,0 +1,13 @@
+<link rel="import" href="../util/config.html">
+
+<script>
+  var leveranciersApi = {
+    getAll: config.apiUrl + "/leveranciers",
+    byLevCode(levcode) {
+      return config.apiUrl + "/leveranciers/" + levcode;
+    },
+    getBestellingenByLevCode(levcode) {
+      return config.apiUrl + "/leveranciers/" + levcode + "/bestellingen";
+    }
+  }
+</script>

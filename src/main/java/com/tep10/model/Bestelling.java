@@ -1,5 +1,6 @@
 package com.tep10.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,7 +32,7 @@ public class Bestelling {
     private Double bedrag;
     @Column
     private String status;
-
+  
     @ManyToOne
     @JoinColumn(name = "bestelling_levcode", referencedColumnName = "levcode")
     private Leverancier leverancier;
