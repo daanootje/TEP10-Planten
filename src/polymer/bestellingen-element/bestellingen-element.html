@@ -1,6 +1,5 @@
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../api/leveranciers.html">
 <link rel="import" href="../quantity-element/quantity-element.html">
 <link rel="import" href="../../../bower_components/paper-datatable/paper-datatable.html">
 
@@ -19,8 +18,16 @@
       }
     </style>
 
+    <h2>Bestellingen van {{route.routeData.name}}</h2>
+
     <paper-datatable id="datatable1" data="{{bestellingen}}">
-        <paper-datatable-column header="Naam" property="name" sortable>
+        <paper-datatable-column header="Bestelnummer" property="bestelnr" sortable>
+        </paper-datatable-column>
+        <paper-datatable-column header="Besteldatum" property="besteldat" sortable>
+        </paper-datatable-column>
+        <paper-datatable-column header="Leverdatum" property="leverdat" sortable>
+        </paper-datatable-column>
+        <paper-datatable-column header="Bedrag" property="bedrag" sortable>
         </paper-datatable-column>
     </paper-datatable>
 
@@ -30,26 +37,26 @@
 
   <script>
 
+  console.log(leveranciersApi);
+
     Polymer({
       is: 'bestellingen-element',
       properties: {
         apiUrl: {
-          type: Object,
-          value: "adsfasdf"
+          type: String,
+          value: leveranciersApi.getBestellingenByLevCode(4)
         },
         bestellingen: {
           type: Array,
-          value: [
-            {name: "1"},
-            {name: "1"},
-            {name: "1"},
-            {name: "1"}
-          ]
-        },
-        route: Object
+          value: []
+        }
+      },
+      handleResponse(response) {
+        console.log(response.detail.response);
+        this.bestellingen = response.detail.response;
       },
       goToLeveranciers() {
-        this.set('route.view', 'leveranciers');
+        this.set('route.routeData.view', 'leveranciers');
       }
     })
 

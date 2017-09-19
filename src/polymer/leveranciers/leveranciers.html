@@ -74,7 +74,12 @@
         this.leveranciers = response.detail.response.content;
       },
       bestellingTapped(forItem) {
+        console.log(this.route);
         this.set('route.view', 'bestellingen');
+        this.set('route.routeData', {
+          id: forItem.levcode,
+          name: forItem.levnaam
+        });
       },
       listeners: {
         'row-tap': 'handleRowTap'

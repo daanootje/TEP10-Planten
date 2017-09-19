@@ -22,9 +22,9 @@
     data="{{routeData}}"
     tail="{{subroute}}"></app-route>
 
-    <iron-pages selected="[[routeData.view]]" attr-for-selected="name">
-      <leveranciers-element name="leveranciers" route={{routeData}}></leveranciers-element>
-      <bestellingen-element name="bestellingen" route="{{routeData}}"></bestellingen-element>
+    <iron-pages selected="[[route.view]]" attr-for-selected="name">
+      <leveranciers-element name="leveranciers" route={{route}}></leveranciers-element>
+      <bestellingen-element name="bestellingen" route="{{route}}"></bestellingen-element>
     </iron-pages>
   </template>
 
@@ -33,43 +33,13 @@
         /* this is the element's prototype */
         is: 'planten-app',
         properties: {
-          _routePageChanged(page) {
-            console.log(page);
-            // If no page was found in the route data, page will be an empty string.
-            // Deault to 'view1' in that case.
-            this.page = page || 'leveranciers';
-
-            // Close a non-persistent drawer when the page & route are changed.
-            if (!this.$.drawer.persistent) {
-              this.$.drawer.close();
-            }
-          },
-
-          _pageChanged(page) {
-            console.log(page);
-            // If no page was found in the route data, page will be an empty string.
-            // Deault to 'view1' in that case.
-            this.page = page || 'leveranciers';
-
-            // Close a non-persistent drawer when the page & route are changed.
-            if (!this.$.drawer.persistent) {
-              this.$.drawer.close();
-            }
-          },
-
-          page: {
-            type: String,
-            reflectToAttribute: true,
-            observer: '_pageChanged',
-          },
-
-          routeData: {
+          route: {
             type: Object,
             value: {
+              routeData: {},
               view: "leveranciers"
             }
-          },
-          subroute: String
+          }
         }
       });
   </script>
