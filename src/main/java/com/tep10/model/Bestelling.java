@@ -37,8 +37,8 @@ public class Bestelling {
     @JoinColumn(name = "bestelling_levcode", referencedColumnName = "levcode")
     private Leverancier leverancier;
 
-//    @OneToMany(mappedBy = "bestelling")
-//    private List<BestelRegel> bestelRegels = new ArrayList<>();
+    @OneToMany(mappedBy = "bestelling")
+    private List<BestelRegel> bestelRegels = new ArrayList<>();
 
     public Bestelling(){
     }

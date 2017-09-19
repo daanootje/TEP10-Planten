@@ -27,5 +27,11 @@ public class Leverancier {
     @Column
     private String woonplaats;
 
+    @OneToMany(mappedBy = "leverancier")
+    private List<Bestelling> bestellingen = new ArrayList<>();
+
+    @OneToMany(mappedBy = "leverancier")
+    private List<Offerte> offertes = new ArrayList<>();
+    
     public Leverancier () {}
 }
