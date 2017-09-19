@@ -54,7 +54,7 @@ public class Leveranciers implements LeveranciersApi{
     }
 
     public ResponseEntity<List<Bestelling>> getBestellingenFromLeverancier(@PathVariable Long levcode) {
-        List<Bestelling> bestellingen = bestellingJPA.findBestellingByLevcode(levcode);
+        List<Bestelling> bestellingen = leverancierJPA.findLeverancierByLevcode(levcode).getBestellingen();
         return checkNotNull(bestellingen);
     }
 

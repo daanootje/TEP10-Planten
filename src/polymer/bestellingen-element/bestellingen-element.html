@@ -2,61 +2,52 @@
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../quantity-element/quantity-element.html">
 <link rel="import" href="../../../bower_components/paper-datatable/paper-datatable.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 
 <dom-module id="bestellingen-element">
   <template>
-    <iron-ajax
-    auto
-    url='[[apiUrl]]'
-    params=''
-    handle-as="json"
-    on-response="handleResponse"
-    debounce-duration="300"></iron-ajax>
+
     <style>
       :host {
-        display: block;
+        display: flex;
       }
     </style>
 
-    <h2>Bestellingen van {{route.routeData.name}}</h2>
-
-    <paper-datatable id="datatable1" data="{{bestellingen}}">
-        <paper-datatable-column header="Bestelnummer" property="bestelnr" sortable>
-        </paper-datatable-column>
-        <paper-datatable-column header="Besteldatum" property="besteldat" sortable>
-        </paper-datatable-column>
-        <paper-datatable-column header="Leverdatum" property="leverdat" sortable>
-        </paper-datatable-column>
-        <paper-datatable-column header="Bedrag" property="bedrag" sortable>
-        </paper-datatable-column>
-    </paper-datatable>
-
-    <d2l-button on-tap="goToLeveranciers">Ga terug</d2l-button>
+    <paper-card heading="Bestellingen van {{levnaam}}">
+      <div class="card-content">
+        <paper-datatable id="datatable1" data="{{bestellingen}}">
+            <paper-datatable-column cell-style="color:gray;" header="Bestelnummer" property="bestelnr" sortable>
+            </paper-datatable-column>
+            <paper-datatable-column header="Besteldatum" property="besteldat" sortable>
+            </paper-datatable-column>
+            <paper-datatable-column header="Leverdatum" property="leverdat" sortable>
+            </paper-datatable-column>
+            <paper-datatable-column align="right" header="Bedrag" property="bedrag" sortable>
+            </paper-datatable-column>
+        </paper-datatable>
+      </div>
+    </paper-card>
 
   </template>
 
   <script>
 
-  console.log(leveranciersApi);
-
     Polymer({
       is: 'bestellingen-element',
       properties: {
-        apiUrl: {
-          type: String,
-          value: leveranciersApi.getBestellingenByLevCode(4)
-        },
         bestellingen: {
           type: Array,
           value: []
         }
       },
       handleResponse(response) {
-        console.log(response.detail.response);
         this.bestellingen = response.detail.response;
       },
       goToLeveranciers() {
-        this.set('route.routeData.view', 'leveranciers');
+        this.set('route.view', 'leveranciers');
+      },
+      getApiUrl() {
+        return leveranciersApi.getBestellingenByLevCode(this.route.routeData.id)
       }
     })
 

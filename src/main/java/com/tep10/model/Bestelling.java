@@ -1,5 +1,6 @@
 package com.tep10.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,12 +33,9 @@ public class Bestelling {
     @Column
     private String status;
 
-    @ManyToOne(optional = false)
-    private Leverancier leverancier;
-
-    @OneToMany
-    @JoinColumn(name = "bestelregels_bestelnr")
-    private List<BestelRegel> bestelRegels = new ArrayList<>();
+//    @OneToMany
+//    @JoinColumn(name = "bestelregel_bestelnr")
+//    private List<BestelRegel> bestelRegels = new ArrayList<>();
 
     public Bestelling() {
     }

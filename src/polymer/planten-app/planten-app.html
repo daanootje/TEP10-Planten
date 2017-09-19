@@ -12,20 +12,24 @@
         display: block;
         font-family: 'Source Sans Pro', sans-serif;
       }
+      h1 {
+        color: white;
+        text-shadow: 1px 2px 5px black;
+        text-align: center;
+      }
     </style>
 
-    <app-location route="{{route}}"></app-location>
+    <app-location route="/asdfasdf"></app-location>
 
     <app-route
     route="{{route}}"
     pattern="/:view"
-    data="{{routeData}}"
-    tail="{{subroute}}"></app-route>
+    data="{{route.routeData}}"
+    tail="{{route.path}}"></app-route>
 
-    <iron-pages selected="[[route.view]]" attr-for-selected="name">
-      <leveranciers-element name="leveranciers" route={{route}}></leveranciers-element>
-      <bestellingen-element name="bestellingen" route="{{route}}"></bestellingen-element>
-    </iron-pages>
+    <h1>Plantenlust</h1>
+    
+    <leveranciers-element name="leveranciers" route={{route}}></leveranciers-element>
   </template>
 
   <script>
@@ -37,7 +41,8 @@
             type: Object,
             value: {
               routeData: {},
-              view: "leveranciers"
+              view: "leveranciers",
+              path: "/leveranciers"
             }
           }
         }

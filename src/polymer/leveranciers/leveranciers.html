@@ -6,6 +6,9 @@
 <link rel="import" href="../bestellingen-element/bestellingen-element.html">
 <link rel="import" href="../../../bower_components/paper-datatable/paper-datatable.html">
 <link rel="import" href="../../../bower_components/d2l-button/d2l-button.html">
+<link rel="import" href="../../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../../bower_components/paper-input/paper-input.html">
 
 <dom-module id="leveranciers-element">
   <template>
@@ -18,40 +21,63 @@
     debounce-duration="300"></iron-ajax>
     <style>
       :host {
-        display: block;
-      }
-      .table-data-column {
-        text-align: center;
-      }
-      .table-action-column {
-        width: 150px;
-      }
-      .table-button {
         display: flex;
-        margin-left: auto;
-        margin-right: auto;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin: 30px;
+      }
+      .leveranciers {
+        width: 50%;
+        overflow: hidden;
+      }
+      .banner: {
+        width: 25%;
+        clip: rect(0px,60px,200px,0px);
+        overflow: hidden;
+      }
+      .leveranciers-content {
+      }
+      .bestellingen{
+        margin: 30px;
       }
     </style>
 
-    <h3>Leveranciers</h3>
+    <paper-card class="leveranciers">
+      <div class="banner">
+        <img src="../resources/images/young_plants_banner_shorter.jpg"/>
+      </div>
+      <div class="card-content leveranciers-content">
+        <paper-datatable id="datatable1" data="{{leveranciers}}">
+            <paper-datatable-column cell-style="color:gray;" header="Code" property="levcode" sortable>
+            </paper-datatable-column>
+            <paper-datatable-column header="Naam" property="levnaam" sortable>
+            </paper-datatable-column>
+            <paper-datatable-column header="Adres" property="adres" sortable>
+            </paper-datatable-column>
+            <paper-datatable-column header="Woonplaats" property="woonplaats" sortable>
+            </paper-datatable-column>
+        </paper-datatable>
+      </div>
+      <div class="card-actions">
+        <paper-button on-tap="previousLeveranciers" raised>previous</paper-button>
+        <paper-button on-tap="nextLeveranciers" raised>next</paper-button>
+      </div>
+    </paper-card>
 
-    <paper-datatable id="datatable1" data="{{leveranciers}}">
-        <paper-datatable-column header="Code" property="levcode" sortable>
-        </paper-datatable-column>
-        <paper-datatable-column header="Naam" property="levnaam" sortable>
-        </paper-datatable-column>
-        <paper-datatable-column header="Adres" property="adres" sortable>
-        </paper-datatable-column>
-        <paper-datatable-column header="Woonplaats" property="woonplaats" sortable>
-        </paper-datatable-column>
-        <paper-datatable-column header="Action" sortable>
-          <template>
-               <d2l-button>Bestellingen</d2l-button>
-          </template>
-        </paper-datatable-column>
-    </paper-datatable>
-
-    <h3>a {{route.path}}</h3>
+    <template is="dom-if" if="[[showBestellingen]]">
+      <iron-ajax
+      auto
+      url='http://localhost:8080/leveranciers/[[selection.levcode]]/bestellingen'
+      params=''
+      handle-as="json"
+      on-response="handleBestellingResponse"
+      debounce-duration="300"></iron-ajax>
+      <bestellingen-element
+        bestellingen=[[selection.bestellingen]]
+        levnaam=[[selection.levnaam]]
+        class="bestellingen">
+      </bestellingen-element>
+    </template>
 
   </template>
 
@@ -65,27 +91,69 @@
         },
         leveranciers: {
           type: Array,
-          value: [
-            {levcode: "bla", bla: "adf"}
-          ]
+          value: []
+        },
+        showBestellingen: {
+          type: Boolean,
+          value: false
+        },
+        bestellingen: {
+          type: Array,
+          value: []
+        },
+        selection: Object,
+        lastPage: {
+          type: Boolean,
+          value: false
+        },
+        page: {
+          type: Number,
+          value: 0
+        },
+        size: {
+          type: Number,
+          value: 5
         }
       },
       handleLeveranciersResponse(response) {
-        this.leveranciers = response.detail.response.content;
+        this.leveranciers = response.detail.response.content.map((lev) => {
+          lev.levnaam = this.capitalizeFirstLetter(lev.levnaam.toLowerCase());
+          lev.woonplaats = this.capitalizeFirstLetter(lev.woonplaats.toLowerCase());
+          lev.adres = this.capitalizeFirstLetter(lev.adres.toLowerCase());
+          return lev;
+        });
+        this.lastPage = response.detail.response.last;
       },
       bestellingTapped(forItem) {
-        console.log(this.route);
         this.set('route.view', 'bestellingen');
         this.set('route.routeData', {
           id: forItem.levcode,
           name: forItem.levnaam
         });
+        this.set('route.path', '/bestellingen')
       },
       listeners: {
         'row-tap': 'handleRowTap'
       },
       handleRowTap(e) {
-        this.bestellingTapped(e.detail.item)
+        this.selection = e.detail.item;
+        this.showBestellingen = true;
+      },
+      handleBestellingResponse(response) {
+        this.selection.bestellingen = response.detail.response;
+      },
+      capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      },
+      nextLeveranciers() {
+        if(!this.lastPage){
+          this.page++;
+          this.apiUrl = leveranciersApi.getAll + "?page=" + this.page + "&size=" + this.size;
+        }
+      },
+      previousLeveranciers() {
+        this.page = Math.max(0, this.page - 1);
+        this.apiUrl = leveranciersApi.getAll + "?page=" + this.page + "&size=" + this.size;
       }
     })
 
