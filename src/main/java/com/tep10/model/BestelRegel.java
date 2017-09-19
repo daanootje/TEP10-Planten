@@ -25,17 +25,18 @@ public class BestelRegel {
     private Long artcode;
     @Column
     private Long aantal;
-    @Column
+    @Column(columnDefinition="Decimal(4,2) default '100.00'")
     private Float bestelprijs;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name = "BestelRegelCompositeKey.bestelnr")
     private Bestelling bestelling;
 
-//    @OneToMany
-//    @JoinColumn(name = "goedontvangst_bestelnr")
-//    private List<GoedOntvangst> goedOntvangsten = new ArrayList<>();
+    @OneToMany(mappedBy = "bestelRegel")
+    private List<GoedOntvangst> goedOntvangsten = new ArrayList<>();
 
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name = "BestelRegelCompositeKey.artcode")
     private Plant plant;
 
     public BestelRegel () {

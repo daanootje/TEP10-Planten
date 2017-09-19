@@ -25,13 +25,15 @@ public class Offerte {
     private String artcodelev;
     @Column
     private Long levtijd;
-    @Column
+    @Column(columnDefinition="Decimal(4,2) default '100.00'")
     private Float offprijs;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name = "OfferteCompositeKey.artcode")
     private Plant plant;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "OfferteCompositeKey.levcode")
     private Leverancier leverancier;
 
     public Offerte () {

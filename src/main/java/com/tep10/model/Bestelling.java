@@ -28,15 +28,18 @@ public class Bestelling {
     private Date besteldat;
     @Column
     private Date leverdat;
-    @Column
-    private Float bedrag;
+    @Column(columnDefinition="Decimal(6,2) default '100.00'")
+    private Double bedrag;
     @Column
     private String status;
 
-//    @OneToMany
-//    @JoinColumn(name = "bestelregel_bestelnr")
+    @ManyToOne
+    @JoinColumn(name = "bestelling_levcode", referencedColumnName = "levcode")
+    private Leverancier leverancier;
+
+//    @OneToMany(mappedBy = "bestelling")
 //    private List<BestelRegel> bestelRegels = new ArrayList<>();
 
-    public Bestelling() {
+    public Bestelling(){
     }
 }
