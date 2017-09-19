@@ -1,16 +1,21 @@
 package com.tep10.resource;
 
+import com.tep10.doa.BestellingJPA;
 import com.tep10.doa.LeverancierJPA;
+import com.tep10.doa.OfferteJPA;
+import com.tep10.model.Bestelling;
 import com.tep10.model.Leverancier;
+import com.tep10.model.Offerte;
 import com.tep10.resource.interfaceApi.LeveranciersApi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -26,12 +31,39 @@ public class Leveranciers implements LeveranciersApi{
     @Autowired
     private LeverancierJPA leverancierJPA;
 
-    public ResponseEntity<Leverancier> getLeverancier(@PathVariable Long levcode) {
+    @Autowired
+    private OfferteJPA offerteJPA;
+
+    @Autowired
+    private BestellingJPA bestellingJPA;
+
+    public ResponseEntity<Leverancier> getLeverancier(@PathVariable(required = false) Long levcode) {
         Leverancier leverancier = leverancierJPA.findLeverancierByLevcode(levcode);
-        if (leverancier == null) {
+        return checkNotNull(leverancier);
+    }
+
+    public ResponseEntity<Page<Leverancier>> getAllLeverancier(@RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                               @RequestParam(value = "size", defaultValue = "5") Integer size){
+        return new ResponseEntity<>(leverancierJPA.findAll(new PageRequest(page, size)), HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<Offerte>> getOffertesFromLeverancier(@PathVariable Long levcode){
+        List<Offerte> offertes = offerteJPA.findOfferteByLevcode(levcode);
+        return checkNotNull(offertes);
+    }
+
+    public ResponseEntity<List<Bestelling>> getBestellingenFromLeverancier(@PathVariable Long levcode) {
+        List<Bestelling> bestellingen = bestellingJPA.findBestellingByLevcode(levcode);
+        return checkNotNull(bestellingen);
+    }
+
+    private <T> ResponseEntity<T> checkNotNull (T object) {
+        if (object == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
-            return new ResponseEntity<>(leverancier, HttpStatus.OK);
+            return new ResponseEntity<>(object, HttpStatus.OK);
         }
     }
+
+
 }
