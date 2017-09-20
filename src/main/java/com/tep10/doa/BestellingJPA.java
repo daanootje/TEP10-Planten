@@ -15,4 +15,6 @@ public interface BestellingJPA extends JpaRepository<Bestelling, Long> {
 
     List<Bestelling> findBestellingByLevcode(Long levcode);
 
+    Bestelling findBestellingByLevcodeAndBestelnr(Long levcode, Long bestelnr);
+
 }

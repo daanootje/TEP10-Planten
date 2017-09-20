@@ -15,5 +15,8 @@ import java.util.List;
 @RepositoryRestController
 public interface BestelRegelJPA  extends JpaRepository<BestelRegel, BestelRegelCompositeKey> {
 
+    List<BestelRegel> findBestelRegelByBestelling_LevcodeAndBestelnr(Long levcode, Long bestelnr);
+
+    BestelRegel findBestelRegelByBestelling_LevcodeAndBestelnrAndArtcode(Long levcode, Long bestelnr, Long artcode);
 
 }

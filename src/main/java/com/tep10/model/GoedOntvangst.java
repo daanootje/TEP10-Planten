@@ -23,7 +23,8 @@ public class GoedOntvangst {
     @Id
     private Long artcode;
     @Id
-    private Date ontv_datum;
+    @Column(name="ontv_datum", unique = true, nullable = false)
+    private Date ontvdatum;
     @Column
     private Long ontv_aantal;
     @Column
@@ -34,9 +35,11 @@ public class GoedOntvangst {
     private Long vlgnr;
 
     @ManyToOne
+    @MapsId("artcode")
+//    @MapsId("bestelnr")
     @JoinColumns( {
-        @JoinColumn(name = "GoedOntvangstCompositeKey.artcode"),
-        @JoinColumn(name = "GoedOntvangstCompositeKey.bestelnr")
+        @JoinColumn(name = "artcode"),
+        @JoinColumn(name = "bestelnr")
     })
     private BestelRegel bestelRegel;
 
