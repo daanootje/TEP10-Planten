@@ -3,6 +3,7 @@
 <link rel="import" href="../t10-data-table/t10-data-table.html">
 <link rel="import" href="../util/columns.html">
 <link rel="import" href="../util/functions.html">
+<link rel="import" href="../article-card/article-card.html">
 
 <dom-module id="leverancier-details">
 
@@ -40,6 +41,16 @@
         on-row-tap="rowCallback">
       </t10-data-table>
     </template>
+    <template is="dom-if" if="[[showArticle]]" restamp="true">
+      <iron-ajax
+      auto
+      url='[[plantCall]]'
+      params=''
+      handle-as="json"
+      on-response="handlePlantRequest"
+      debounce-duration="300"></iron-ajax>
+      <article-card class="bla" article=[[selectedArticle]] on-button-tap="articleBackCallback"></article-card>
+    </template>
 
   </template>
 
@@ -54,12 +65,18 @@
           itemColumns: Array,
           tableName: String,
           tableCall: String,
-          rowCallback: Function
+          rowCallback: Function,
+          selectedArticle: Object,
+          plantCall: String
         },
         handleItemRequest(response) {
           this.items = response.detail.response;
         },
+        handlePlantRequest(response) {
+          this.selectedArticle = response.detail.response;
+        },
         changeTable(rowCallback, itemColumns, tableName, tableApiCall) {
+          this.showArticle = false;
           this.items = [];
           this.rowCallback = rowCallback;
           this.showTable = true;
@@ -75,14 +92,23 @@
             "http://localhost:8080/leveranciers/" + this.levcode + "/bestellingen");
         },
         showOffertesTapped(e) {
-          this.changeTable(function(){}, columns.offertes,
+          this.changeTable(this.showPlant, columns.offertes,
             "Offertes van " + this.levnaam,
             "http://localhost:8080/leveranciers/" + this.levcode + "/offertes");
         },
         bestellingenRowTap(e) {
-          this.changeTable(this.bestellingenRowTap, columns.bestelRegels,
+          this.changeTable(this.showPlant, columns.bestelRegels,
             "Bestelregels van bestelling " + e.detail.item.bestelnr,
             "http://localhost:8080/leveranciers/" + this.levcode + "/bestellingen/" + e.detail.item.bestelnr);
+        },
+        articleBackCallback() {
+          this.showTable = true;
+          this.showArticle = false;
+        },
+        showPlant(e) {
+          this.showArticle = true;
+          this.showTable = false;
+          this.plantCall = "http://localhost:8080/planten/" + e.detail.item.artcode;
         }
       });
   </script>

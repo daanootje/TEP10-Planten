@@ -9,6 +9,7 @@
         display: flex;
         margin-top: 30px;
         width: 100%;
+        background-color: #e6ffe6;
       }
       .data-table-card {
         width: 100%;
@@ -16,7 +17,7 @@
       }
     </style>
 
-    <paper-card heading="{{tableName}}" class="data-table-card">
+    <paper-card heading="{{tableName}}" class="data-table-card" style="background-color: #e6ffe6;">
       <div class="card-content">
         <paper-datatable id="datatable1" data="{{items}}">
           <template is="dom-repeat" items="{{columns}}">

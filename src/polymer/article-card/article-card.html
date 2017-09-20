@@ -1,0 +1,67 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+
+<dom-module id="article-card">
+
+  <template>
+    <style>
+      :host {
+        display: flex;
+        margin-top: 30px;
+      }
+      .contents {
+        display: block;
+        margin-left: 30px;
+        margin-right: 30px;
+      }
+      .the-image {
+        display: flex;
+        align-items: center;
+        height: 30vh;
+      }
+      .button-paper {
+        display: flex;
+        align-items: flex-end;
+      }
+    </style>
+
+    <paper-card style="width: 100%; background-color: #e6ffe6;">
+      <iron-ajax
+      auto
+      url='https://api.gettyimages.com/v3/search/images?fields=id,title,thumb,referral_destinations&sort_order=best&phrase=Kalmoes'
+      params=''
+      handle-as="json"
+      headers='{"Api-key": ""}'
+      on-response="handleImageRequest"
+      debounce-duration="300"></iron-ajax>
+      <img class="the-image" src="[[imageUrl]]">
+      <div class="contents">
+        <h3>[[article.plantennaam]]</h3>
+        <p>Soort: [[article.soort]]</p>
+        <p>Kleur: [[article.kleur]]</p>
+        <p>Hoogte: [[article.hoogte]]</p>
+        <paper-button class="button-paper" on-tap="goBack" style="background-color: white;" raised>Ga terug</paper-button>
+      </div>
+    <paper-card>
+
+  </template>
+
+  <script>
+    Polymer({
+        is: 'article-card',
+        properties: {
+          article: Object,
+          imageUrl: String
+        },
+        goBack() {
+          this.fire("button-tap");
+        },
+        handleImageRequest(data){
+          if(data.detail.response.images.length > 0) {
+            this.imageUrl = data.detail.response.images[0].display_sizes[0].uri;
+          } else {
+            this.imageUrl = "http://www.ikea.com/us/en/images/products/ravenea-potted-plant__0121015_PE277828_S4.JPG";
+          }
+        }
+      });
+  </script>
+</dom-module>

@@ -30,6 +30,7 @@
       .leveranciers {
         width: 50%;
         overflow: hidden;
+        background-color: #e6ffe6;
       }
       .banner: {
         width: 25%;
@@ -40,6 +41,10 @@
       }
       .bestellingen{
         margin: 30px;
+      }
+      .paper-button {
+        background-color: white;
+        margin: 10px;
       }
     </style>
 
@@ -60,8 +65,8 @@
         </paper-datatable>
       </div>
       <div class="card-actions" style="display: flex;">
-        <paper-button on-tap="previousLeveranciers" raised style="margin: 10px;">previous</paper-button>
-        <paper-button on-tap="nextLeveranciers" raised style="margin: 10px;">next</paper-button>
+        <paper-button on-tap="previousLeveranciers" raised class="paper-button">previous</paper-button>
+        <paper-button on-tap="nextLeveranciers" raised class="paper-button">next</paper-button>
       </div>
     </paper-card>
 
