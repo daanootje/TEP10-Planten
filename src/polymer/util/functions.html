@@ -1,7 +1,11 @@
 <script>
 var UtilFunctions = {
   forcePolymerUpdate(array) {
-
+    var newObject = [];
+    for(var i = 0; i < array.length; i++) {
+      newObject.push(JSON.parse(JSON.stringify(array[i])));
+    }
+    return newObject;
   }
 }
 </script>

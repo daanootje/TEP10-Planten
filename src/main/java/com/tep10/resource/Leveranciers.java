@@ -17,18 +17,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-<<<<<<< HEAD
 import org.springframework.web.bind.annotation.*;
-=======
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
->>>>>>> 7656f2c... Added post endpoint to leveranciers. Objects still init at null
 
-
-import javax.xml.ws.Response;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by UG34QP on 18-9-2017.
@@ -78,10 +71,13 @@ public class Leveranciers implements LeveranciersApi{
     }
 
     public ResponseEntity<List<BestelRegel>>  getBesteRegelsFromBestelling(@PathVariable Long levcode, @PathVariable Long bestelnr) throws NotFoundException {
-//        List<BestelRegel> besteregels = bestelRegelJPA.findBestelRegelByBestelling_LevcodeAndBestelnr(levcode, bestelnr);
-        List<BestelRegel> besteregels = bestelRegelJPA.findAll();
-        return checkNotNull(besteregels);
-//        return new ResponseEntity<>(HttpStatus.OK);
+        List<BestelRegel> bestelRegels = leverancierJPA.findLeverancierByLevcode(levcode)
+                .getBestellingen().stream()
+                .filter(best -> best.getBestelnr().equals(bestelnr))
+                .findFirst().get()
+                .getBestelRegels();
+
+        return checkNotNull(bestelRegels);
     }
 
     private <T> ResponseEntity<T> checkNotNull (T object) {

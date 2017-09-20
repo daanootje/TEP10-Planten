@@ -2,6 +2,7 @@
 <link rel="import" href="../leverancier-actions/leverancier-actions.html">
 <link rel="import" href="../t10-data-table/t10-data-table.html">
 <link rel="import" href="../util/columns.html">
+<link rel="import" href="../util/functions.html">
 
 <dom-module id="leverancier-details">
 
@@ -14,13 +15,16 @@
         margin-left: 30px;
         width: 45%;
       }
+      .bla {
+        height:60vh;
+      }
     </style>
 
     <leverancier-actions
     leverancier=[[levnaam]]
     on-show-bestelling="showBestellingTapped"
     on-show-offertes="showOffertesTapped"></leverancier-actions>
-    <template is="dom-if" if="[[showTable]]">
+    <template is="dom-if" if="[[showTable]]" id="dataTableIf">
       <iron-ajax
       auto
       url='[[tableCall]]'
@@ -29,6 +33,7 @@
       on-response="handleItemRequest"
       debounce-duration="300"></iron-ajax>
       <t10-data-table
+      class="bla"
         items=[[items]]
         columns=[[itemColumns]]
         table-name="[[tableName]]"
@@ -58,7 +63,9 @@
           this.items = [];
           this.rowCallback = rowCallback;
           this.showTable = true;
-          this.itemColumns = itemColumns;
+          this.set('itemColumns', []);
+          this.$.dataTableIf.render(); //force update col
+          this.set('itemColumns', itemColumns);
           this.tableName = tableName;
           this.tableCall = tableApiCall;
         },
@@ -68,14 +75,14 @@
             "http://localhost:8080/leveranciers/" + this.levcode + "/bestellingen");
         },
         showOffertesTapped(e) {
-          this.changeTable(this.bestellingenRowTap, columns.offertes,
+          this.changeTable(function(){}, columns.offertes,
             "Offertes van " + this.levnaam,
             "http://localhost:8080/leveranciers/" + this.levcode + "/offertes");
         },
         bestellingenRowTap(e) {
           this.changeTable(this.bestellingenRowTap, columns.bestelRegels,
             "Bestelregels van bestelling " + e.detail.item.bestelnr,
-            "<bestellingenRowCall>");
+            "http://localhost:8080/leveranciers/" + this.levcode + "/bestellingen/" + e.detail.item.bestelnr);
         }
       });
   </script>
