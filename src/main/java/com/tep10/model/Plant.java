@@ -31,7 +31,7 @@ public class Plant {
     private Long bloeibeg;
     @Column
     private Long bloeieind;
-    @Column
+    @Column(columnDefinition="Decimal(4,2) default '100.00'")
     private Float prijs;
     @Column
     private Float vrr_aantal;
@@ -40,14 +40,12 @@ public class Plant {
     @Column
     private String BTWtype;
 
-    @OneToMany
-    @JoinColumn(name = "bestelregels_artcode")
+    @OneToMany(mappedBy = "artcode")
     private List<BestelRegel> bestelRegels = new ArrayList<>();
 
-    @OneToMany
-    @JoinColumn(name = "offertes_artcode")
+    @OneToMany(mappedBy = "artcode")
     private List<Offerte> offertes = new ArrayList<>();
 
-    public Plant() {
+    public Plant () {
     }
 }

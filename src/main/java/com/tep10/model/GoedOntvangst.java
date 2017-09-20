@@ -33,8 +33,12 @@ public class GoedOntvangst {
     @Column
     private Long vlgnr;
 
-    @ManyToOne(optional = false)
-    BestelRegel bestelRegel;
+    @ManyToOne
+    @JoinColumns( {
+        @JoinColumn(name = "GoedOntvangstCompositeKey.artcode"),
+        @JoinColumn(name = "GoedOntvangstCompositeKey.bestelnr")
+    })
+    private BestelRegel bestelRegel;
 
     public GoedOntvangst () {
     }

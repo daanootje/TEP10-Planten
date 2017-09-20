@@ -27,13 +27,11 @@ public class Leverancier {
     @Column
     private String woonplaats;
 
-    @OneToMany(mappedBy = "levcode")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "levcode")
     private List<Bestelling> bestellingen = new ArrayList<>();
 
-    @OneToMany
-    @JoinColumn(name = "offertes_levcode")
+    @OneToMany(mappedBy = "levcode")
     private List<Offerte> offertes = new ArrayList<>();
-
-    public Leverancier () {
-    }
+    
+    public Leverancier () {}
 }
