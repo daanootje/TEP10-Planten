@@ -32,6 +32,7 @@ public class BestelRegel {
     @ManyToOne
     @MapsId("bestelnr")
     @JoinColumn(name = "bestelnr")
+    private Bestelling beselling;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "bestelRegel")
     private List<GoedOntvangst> goedOntvangsten = new ArrayList<>();
