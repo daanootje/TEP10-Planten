@@ -32,11 +32,11 @@ public class Bestelling {
     @Column
     private String status;
 
-    @ManyToOne
-    @JoinColumn(name = "bestelling_levcode", referencedColumnName = "levcode")
-    private Leverancier leverancier;
+//    @ManyToOne
+//    @JoinColumn(name = "bestelling_levcode", referencedColumnName = "levcode")
+//    private Leverancier leverancier;
 
-    @OneToMany(mappedBy = "bestelling")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bestelnr")
     private List<BestelRegel> bestelRegels = new ArrayList<>();
 
     public Bestelling(){

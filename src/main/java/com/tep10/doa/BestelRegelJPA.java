@@ -13,8 +13,8 @@ import java.util.List;
  */
 public interface BestelRegelJPA  extends JpaRepository<BestelRegel, BestelRegelCompositeKey> {
 
-//    @Query("select b from BestelRegel b inner join b.bestelling bs where bs.levcode = ?1 and b.bestelnr = ?2")
-//    @Query("select b from BestelRegel b where b.bestelnr = ?2")
+//    SELECT MAX(p.price) FROM PurchaseOrde o JOIN o.orderLineItems l JOIN l.product p JOIN p.supplier s WHERE s.sup_name = 'Tortuga Trading'"
+
     @Query("select br from BestelRegel br join br.bestelling b where b.levcode = ?1 and br.bestelnr = ?2")
     List<BestelRegel> findBestelRegelByBestelling_LevcodeAndBestelnr(Long levcode, Long bestelnr);
 

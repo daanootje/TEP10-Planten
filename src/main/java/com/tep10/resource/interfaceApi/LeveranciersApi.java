@@ -15,7 +15,6 @@ import java.util.List;
  * Created by UG34QP on 18-9-2017.
  */
 @RequestMapping("leveranciers")
-@CrossOrigin("https://localhost:8081")
 public interface LeveranciersApi {
 
     @RequestMapping(path = "{levcode}", method = RequestMethod.GET)

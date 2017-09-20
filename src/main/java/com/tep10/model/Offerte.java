@@ -28,13 +28,13 @@ public class Offerte {
     @Column(columnDefinition="Decimal(4,2) default '100.00'")
     private Float offprijs;
 
-    @ManyToOne
-    @JoinColumn(name = "OfferteCompositeKey.artcode")
-    private Plant plant;
-
-    @ManyToOne(optional = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "OfferteCompositeKey.levcode")
-    private Leverancier leverancier;
+//    @ManyToOne
+//    @JoinColumn(name = "OfferteCompositeKey.artcode")
+//    private Plant plant;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "OfferteCompositeKey.levcode")
+//    private Leverancier leverancier;
 
     public Offerte () {
     }
