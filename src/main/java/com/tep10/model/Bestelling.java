@@ -1,5 +1,7 @@
 package com.tep10.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,6 +39,7 @@ public class Bestelling {
 //    private Leverancier leverancier;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "bestelnr")
+    @JsonIgnore
     private List<BestelRegel> bestelRegels = new ArrayList<>();
 
     public Bestelling(){
