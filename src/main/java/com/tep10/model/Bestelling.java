@@ -38,6 +38,7 @@ public class Bestelling {
 //    private Leverancier leverancier;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "bestelnr")
+    @JsonIgnore
     private List<BestelRegel> bestelRegels = new ArrayList<>();
 
     public Bestelling(){

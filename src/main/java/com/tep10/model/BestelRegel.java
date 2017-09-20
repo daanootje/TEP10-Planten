@@ -1,5 +1,6 @@
 package com.tep10.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import com.tep10.model.compositeKeys.BestelRegelCompositeKey;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,8 +30,8 @@ public class BestelRegel {
     private Float bestelprijs;
 
     @ManyToOne
-    @JoinColumn(name = "BestelRegelCompositeKey")
-    private Bestelling bestelling;
+    @MapsId("bestelnr")
+    @JoinColumn(name = "bestelnr")
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "bestelRegel")
     private List<GoedOntvangst> goedOntvangsten = new ArrayList<>();

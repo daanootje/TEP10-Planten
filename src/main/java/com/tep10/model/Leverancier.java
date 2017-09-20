@@ -32,6 +32,6 @@ public class Leverancier {
 
     @OneToMany(mappedBy = "levcode")
     private List<Offerte> offertes = new ArrayList<>();
-    
+
     public Leverancier () {}
 }
