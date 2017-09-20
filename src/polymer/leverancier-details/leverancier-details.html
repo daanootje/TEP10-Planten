@@ -25,7 +25,7 @@
     leverancier=[[levnaam]]
     on-show-bestelling="showBestellingTapped"
     on-show-offertes="showOffertesTapped"></leverancier-actions>
-    <template is="dom-if" if="[[showTable]]" id="dataTableIf">
+    <template is="dom-if" if="[[showTable]]" id="dataTableIf" restamp="true">
       <iron-ajax
       auto
       url='[[tableCall]]'
@@ -38,7 +38,9 @@
         items=[[items]]
         columns=[[itemColumns]]
         table-name="[[tableName]]"
-        on-row-tap="rowCallback">
+        on-row-tap="rowCallback"
+        on-plus="add"
+        showAdd="[[showAddButton]]">
       </t10-data-table>
     </template>
     <template is="dom-if" if="[[showArticle]]" restamp="true">
@@ -67,7 +69,9 @@
           tableCall: String,
           rowCallback: Function,
           selectedArticle: Object,
-          plantCall: String
+          plantCall: String,
+          add: Function,
+          showAddButton: Boolean
         },
         handleItemRequest(response) {
           this.items = response.detail.response;
@@ -75,7 +79,7 @@
         handlePlantRequest(response) {
           this.selectedArticle = response.detail.response;
         },
-        changeTable(rowCallback, itemColumns, tableName, tableApiCall) {
+        changeTable(rowCallback, itemColumns, tableName, tableApiCall, plusCallback) {
           this.showArticle = false;
           this.items = [];
           this.rowCallback = rowCallback;
@@ -85,21 +89,31 @@
           this.set('itemColumns', itemColumns);
           this.tableName = tableName;
           this.tableCall = tableApiCall;
+          this.add = plusCallback;
+          this.showAddButton = true;//plusCallback != undefined;
         },
         showBestellingTapped(e) {
+          this.showTable = false;
+          this.$.dataTableIf.render();
+          this.showTable = true;
           this.changeTable(this.bestellingenRowTap, columns.bestellingen,
             "Bestellingen van " + this.levnaam,
-            "http://localhost:8080/leveranciers/" + this.levcode + "/bestellingen");
+            "http://localhost:8080/leveranciers/" + this.levcode + "/bestellingen",
+            this.addBestelling, true);
         },
         showOffertesTapped(e) {
+          this.showTable = false;
+          this.$.dataTableIf.render();
+          this.showTable = true;
           this.changeTable(this.showPlant, columns.offertes,
             "Offertes van " + this.levnaam,
-            "http://localhost:8080/leveranciers/" + this.levcode + "/offertes");
+            "http://localhost:8080/leveranciers/" + this.levcode + "/offertes")
         },
         bestellingenRowTap(e) {
           this.changeTable(this.showPlant, columns.bestelRegels,
             "Bestelregels van bestelling " + e.detail.item.bestelnr,
-            "http://localhost:8080/leveranciers/" + this.levcode + "/bestellingen/" + e.detail.item.bestelnr);
+            "http://localhost:8080/leveranciers/" + this.levcode + "/bestellingen/" + e.detail.item.bestelnr,
+            this.addBestelregel);
         },
         articleBackCallback() {
           this.showTable = true;
@@ -109,6 +123,12 @@
           this.showArticle = true;
           this.showTable = false;
           this.plantCall = "http://localhost:8080/planten/" + e.detail.item.artcode;
+        },
+        addBestelling(e) {
+          console.log('ADDD')
+        },
+        addBestelregel(e) {
+          console.log('Bestelregel')
         }
       });
   </script>
