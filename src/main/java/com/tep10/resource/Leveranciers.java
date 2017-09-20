@@ -78,9 +78,10 @@ public class Leveranciers implements LeveranciersApi{
     }
 
     public ResponseEntity<List<BestelRegel>>  getBesteRegelsFromBestelling(@PathVariable Long levcode, @PathVariable Long bestelnr) throws NotFoundException {
-//        List<BestelRegel> besteregels = bestelRegelJPA.findAll();
-        List<BestelRegel> besteregels = bestelRegelJPA.findBestelRegelByBestelling_LevcodeAndBestelnr(levcode, bestelnr);
+//        List<BestelRegel> besteregels = bestelRegelJPA.findBestelRegelByBestelling_LevcodeAndBestelnr(levcode, bestelnr);
+        List<BestelRegel> besteregels = bestelRegelJPA.findAll();
         return checkNotNull(besteregels);
+//        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     private <T> ResponseEntity<T> checkNotNull (T object) {

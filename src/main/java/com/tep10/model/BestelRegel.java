@@ -29,15 +29,15 @@ public class BestelRegel {
     private Float bestelprijs;
 
     @ManyToOne
-    @JoinColumn(name = "BestelRegelCompositeKey.bestelnr")
+    @JoinColumn(name = "BestelRegelCompositeKey")
     private Bestelling bestelling;
 
-    @OneToMany(mappedBy = "bestelRegel")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bestelRegel")
     private List<GoedOntvangst> goedOntvangsten = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "BestelRegelCompositeKey.artcode")
-    private Plant plant;
+//    @ManyToOne
+//    @JoinColumn(name = "BestelRegelCompositeKey.artcode")
+//    private Plant plant;
 
     public BestelRegel () {
     }

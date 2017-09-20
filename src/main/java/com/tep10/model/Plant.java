@@ -40,10 +40,10 @@ public class Plant {
     @Column
     private String BTWtype;
 
-    @OneToMany(mappedBy = "plant")
+    @OneToMany(mappedBy = "artcode")
     private List<BestelRegel> bestelRegels = new ArrayList<>();
 
-    @OneToMany(mappedBy = "plant")
+    @OneToMany(mappedBy = "artcode")
     private List<Offerte> offertes = new ArrayList<>();
 
     public Plant () {
