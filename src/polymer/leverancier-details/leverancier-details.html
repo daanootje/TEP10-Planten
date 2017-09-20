@@ -1,0 +1,82 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../leverancier-actions/leverancier-actions.html">
+<link rel="import" href="../t10-data-table/t10-data-table.html">
+<link rel="import" href="../util/columns.html">
+
+<dom-module id="leverancier-details">
+
+  <template>
+    <style>
+      :host {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        margin-left: 30px;
+        width: 45%;
+      }
+    </style>
+
+    <leverancier-actions
+    leverancier=[[levnaam]]
+    on-show-bestelling="showBestellingTapped"
+    on-show-offertes="showOffertesTapped"></leverancier-actions>
+    <template is="dom-if" if="[[showTable]]">
+      <iron-ajax
+      auto
+      url='[[tableCall]]'
+      params=''
+      handle-as="json"
+      on-response="handleItemRequest"
+      debounce-duration="300"></iron-ajax>
+      <t10-data-table
+        items=[[items]]
+        columns=[[itemColumns]]
+        table-name="[[tableName]]"
+        on-row-tap="rowCallback">
+      </t10-data-table>
+    </template>
+
+  </template>
+
+  <script>
+    Polymer({
+        is: 'leverancier-details',
+        properties: {
+          levnaam: String,
+          levcode: Number,
+          items: Array,
+          showTable: Boolean,
+          itemColumns: Array,
+          tableName: String,
+          tableCall: String,
+          rowCallback: Function
+        },
+        handleItemRequest(response) {
+          this.items = response.detail.response;
+        },
+        changeTable(rowCallback, itemColumns, tableName, tableApiCall) {
+          this.items = [];
+          this.rowCallback = rowCallback;
+          this.showTable = true;
+          this.itemColumns = itemColumns;
+          this.tableName = tableName;
+          this.tableCall = tableApiCall;
+        },
+        showBestellingTapped(e) {
+          this.changeTable(this.bestellingenRowTap, columns.bestellingen,
+            "Bestellingen van " + this.levnaam,
+            "http://localhost:8080/leveranciers/" + this.levcode + "/bestellingen");
+        },
+        showOffertesTapped(e) {
+          this.changeTable(this.bestellingenRowTap, columns.offertes,
+            "Offertes van " + this.levnaam,
+            "http://localhost:8080/leveranciers/" + this.levcode + "/offertes");
+        },
+        bestellingenRowTap(e) {
+          this.changeTable(this.bestellingenRowTap, columns.bestelRegels,
+            "Bestelregels van bestelling " + e.detail.item.bestelnr,
+            "<bestellingenRowCall>");
+        }
+      });
+  </script>
+</dom-module>

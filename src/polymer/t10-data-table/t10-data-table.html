@@ -1,0 +1,53 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/paper-datatable/paper-datatable.html">
+
+<dom-module id="t10-data-table">
+  <template>
+
+    <style>
+      :host {
+        display: flex;
+        margin-top: 30px;
+        width: 100%;
+      }
+      .data-table-card {
+        width: 100%;
+      }
+    </style>
+
+    <paper-card heading="{{tableName}}" class="data-table-card">
+      <div class="card-content">
+        <paper-datatable id="datatable1" data="{{items}}">
+          <template is="dom-repeat" items="{{columns}}">
+            <paper-datatable-column
+            cell-style="{{item.color}}"
+            header="{{item.name}}"
+            property="{{item.property}}"
+            sortable="{{item.sortable}}">
+            </paper-datatable-column>
+          </template>
+        </paper-datatable>
+      </div>
+    </paper-card>
+
+  </template>
+
+  <script>
+
+    Polymer({
+      is: 't10-data-table',
+      properties: {
+        items: {
+          type: Array,
+          value: []
+        },
+        columns: {
+          type: Array,
+          value: []
+        },
+        tableName: String
+      }
+    })
+
+  </script>
+</dom-module>

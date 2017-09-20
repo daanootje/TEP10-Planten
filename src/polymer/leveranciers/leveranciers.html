@@ -9,7 +9,7 @@
 <link rel="import" href="../../../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../sub-container/sub-container.html">
+<link rel="import" href="../leverancier-details/leverancier-details.html">
 
 <dom-module id="leveranciers-element">
   <template>
@@ -24,6 +24,7 @@
       :host {
         display: flex;
         flex-wrap: wrap;
+        justify-content: flex-start;
         margin: 30px;
       }
       .leveranciers {
@@ -47,7 +48,7 @@
         <img src="../resources/images/young_plants_banner_shorter.jpg"/>
       </div>
       <div class="card-content leveranciers-content">
-        <paper-datatable id="datatable1" data="{{leveranciers}}">
+        <paper-datatable id="datatable1" data="{{leveranciers}}" on-row-tap="handleRowTap">
             <paper-datatable-column cell-style="color:gray;" header="Code" property="levcode" sortable>
             </paper-datatable-column>
             <paper-datatable-column header="Naam" property="levnaam" sortable>
@@ -64,8 +65,8 @@
       </div>
     </paper-card>
 
-    <template is="dom-if" if="[[showActions]]">
-      <sub-container levnaam=[[selection.levnaam]] levcode=[[selection.levcode]]></sub-container>
+    <template id="leverancierDetailsIf" is="dom-if" if="[[showActions]]" restamp="true">
+      <leverancier-details levnaam=[[selection.levnaam]] levcode=[[selection.levcode]] on-dom-change="test"></leverancier-details>
     </template>
 
   </template>
@@ -109,10 +110,9 @@
         });
         this.lastPage = response.detail.response.last;
       },
-      listeners: {
-        'row-tap': 'handleRowTap'
-      },
       handleRowTap(e) {
+        this.showActions = false;
+        this.$.leverancierDetailsIf.render();
         this.selection = e.detail.item;
         this.showActions = true;
       },
