@@ -27,13 +27,10 @@
         properties: {
         },
         tappedBestellingen() {
-          this.set('showBestellingen', true);
-          this.set('showOffertes', false);
           this.fire('show-bestelling');
         },
         tappedOffertes() {
-          this.set('showOffertes', true);
-          this.set('showBestellingen', false);
+          this.fire('show-offertes');
         }
       });
   </script>

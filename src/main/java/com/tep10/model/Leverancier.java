@@ -27,7 +27,7 @@ public class Leverancier {
     @Column
     private String woonplaats;
 
-    @OneToMany(cascade=CascadeType.ALL, mappedBy="levcode")
+    @OneToMany(mappedBy = "levcode")
     private List<Bestelling> bestellingen = new ArrayList<>();
 
     @OneToMany
