@@ -1,5 +1,7 @@
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../leverancier-actions/leverancier-actions.html">
+<link rel="import" href="../t10-data-table/t10-data-table.html">
+<link rel="import" href="../util/columns.html">
 
 <dom-module id="sub-container">
 
@@ -22,11 +24,12 @@
       handle-as="json"
       on-response="handleBestellingResponse"
       debounce-duration="300"></iron-ajax>
-      <bestellingen-element
-        bestellingen=[[bestellingen]]
-        levnaam=[[levnaam]]
-        class="bestellingen">
-      </bestellingen-element>
+      <t10-data-table
+        items=[[bestellingen]]
+        columns=[[bestellingenColumns]]
+        table-name="Bestellingen van [[levnaam]]"
+        style="margin-top: 30px">
+      </t10-data-table>
     </template>
 
   </template>
@@ -37,8 +40,12 @@
         properties: {
           levnaam: String,
           levcode: Number,
-          bestellinge: Array,
-          showBestelling: Boolean
+          bestellingen: Array,
+          showBestelling: Boolean,
+          bestellingenColumns: {
+            type: Array,
+            value: columns.bestellingen
+          }
         },
         handleBestellingResponse(response) {
           this.bestellingen = response.detail.response;
