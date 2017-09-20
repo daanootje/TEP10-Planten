@@ -17,17 +17,24 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+<<<<<<< HEAD
+import org.springframework.web.bind.annotation.*;
+=======
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+>>>>>>> 7656f2c... Added post endpoint to leveranciers. Objects still init at null
 
+
+import javax.xml.ws.Response;
 import java.util.List;
 
 /**
  * Created by UG34QP on 18-9-2017.
  */
 @RestController
+@CrossOrigin("http://localhost:8081")
 public class Leveranciers implements LeveranciersApi{
 
     private static final Logger log = LoggerFactory.getLogger(Leveranciers.class);
@@ -84,6 +91,5 @@ public class Leveranciers implements LeveranciersApi{
                 return new ResponseEntity<>(object, HttpStatus.OK);
         }
     }
-
 
 }
