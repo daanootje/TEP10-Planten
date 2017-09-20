@@ -19,15 +19,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static com.tep10.resource.Validator.checkNotNull;
 
 /**
  * Created by UG34QP on 18-9-2017.
  */
 @RestController
-@CrossOrigin("http://localhost:8081")
 public class Leveranciers implements LeveranciersApi{
 
     private static final Logger log = LoggerFactory.getLogger(Leveranciers.class);
@@ -41,8 +40,8 @@ public class Leveranciers implements LeveranciersApi{
     @Autowired
     private BestellingJPA bestellingJPA;
 
-    @Autowired
-    private BestelRegelJPA bestelRegelJPA;
+//    @Autowired
+//    private BestelRegelJPA bestelRegelJPA;
 
     public ResponseEntity<Leverancier> getLeverancier(@PathVariable(required = false) Long levcode) throws NotFoundException {
         Leverancier leverancier = leverancierJPA.findLeverancierByLevcode(levcode);
@@ -79,13 +78,4 @@ public class Leveranciers implements LeveranciersApi{
 
         return checkNotNull(bestelRegels);
     }
-
-    private <T> ResponseEntity<T> checkNotNull (T object) {
-        if (object == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } else {
-                return new ResponseEntity<>(object, HttpStatus.OK);
-        }
-    }
-
 }
