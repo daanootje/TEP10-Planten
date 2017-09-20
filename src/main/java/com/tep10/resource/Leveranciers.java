@@ -68,6 +68,17 @@ public class Leveranciers implements LeveranciersApi{
         return checkNotNull(bestellingen);
     }
 
+    public ResponseEntity<Bestelling> setBestellingAtLeverancier(@PathVariable Long levcode, @PathVariable Long bestelnr,
+                                                           @RequestBody Bestelling bestelling) throws NotFoundException {
+        if (leverancierJPA.findLeverancierByLevcode(levcode) == null || bestellingJPA.findBestellingByLevcodeAndBestelnr(levcode, bestelnr) != null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else {
+            bestellingJPA.save(bestelling);
+            return new ResponseEntity<>(bestellingJPA.findBestellingByLevcodeAndBestelnr(levcode, bestelnr), HttpStatus.OK);
+        }
+    }
+
+
     public ResponseEntity<Bestelling> getBestellingFromLeverancier(@PathVariable Long levcode, @PathVariable Long bestelnr) throws NotFoundException {
         Bestelling bestelling = bestellingJPA.findBestellingByLevcodeAndBestelnr(levcode, bestelnr);
         return checkNotNull(bestelling);
@@ -75,11 +86,6 @@ public class Leveranciers implements LeveranciersApi{
 
     public ResponseEntity<List<BestelRegel>> getBesteRegelsFromBestelling(@PathVariable Long levcode, @PathVariable Long bestelnr) throws NotFoundException {
             List<BestelRegel> bestelRegels = bestelRegelJPA.findBestelRegelByBestelling_LevcodeAndBestelnr(levcode, bestelnr);
-//        List<BestelRegel> bestelRegels = leverancierJPA.findLeverancierByLevcode(levcode)
-//                .getBestellingen().stream()
-//                .filter(best -> best.getBestelnr().equals(bestelnr))
-//                .findFirst().get()
-//                .getBestelRegels();
         return checkNotNull(bestelRegels);
     }
 

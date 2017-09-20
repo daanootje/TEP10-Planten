@@ -35,6 +35,10 @@ public interface LeveranciersApi {
     @RequestMapping(path = "{levcode}/bestellingen/{bestelnr}", method = RequestMethod.GET)
     ResponseEntity<Bestelling>  getBestellingFromLeverancier(@PathVariable Long levcode, @PathVariable Long bestelnr) throws NotFoundException;
 
+    @RequestMapping(path = "{levcode}/bestellingen/{bestelnr}", method = RequestMethod.POST)
+    ResponseEntity<Bestelling>  setBestellingAtLeverancier(@PathVariable Long levcode, @PathVariable Long bestelnr,
+                                                           @RequestBody Bestelling bestelling) throws NotFoundException;
+
     @RequestMapping(path = "{levcode}/bestellingen/{bestelnr}/bestelregels", method = RequestMethod.GET)
     ResponseEntity<List<BestelRegel>>  getBesteRegelsFromBestelling(@PathVariable Long levcode, @PathVariable Long bestelnr) throws NotFoundException;
 
