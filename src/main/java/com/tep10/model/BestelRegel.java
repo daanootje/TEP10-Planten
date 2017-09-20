@@ -1,5 +1,6 @@
 package com.tep10.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import com.tep10.model.compositeKeys.BestelRegelCompositeKey;
 import lombok.AllArgsConstructor;
@@ -32,9 +33,10 @@ public class BestelRegel {
     @ManyToOne
     @MapsId("bestelnr")
     @JoinColumn(name = "bestelnr")
-    private Bestelling beselling;
+    private Bestelling bestelling;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bestelRegel")
+    @OneToMany(mappedBy = "bestelRegel")
+    @JsonIgnore
     private List<GoedOntvangst> goedOntvangsten = new ArrayList<>();
 
 //    @ManyToOne

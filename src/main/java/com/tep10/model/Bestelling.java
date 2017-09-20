@@ -37,7 +37,7 @@ public class Bestelling {
 //    @JoinColumn(name = "bestelling_levcode", referencedColumnName = "levcode")
 //    private Leverancier leverancier;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bestelnr")
+    @OneToMany(mappedBy = "bestelnr")
     @JsonIgnore
     private List<BestelRegel> bestelRegels = new ArrayList<>();
 

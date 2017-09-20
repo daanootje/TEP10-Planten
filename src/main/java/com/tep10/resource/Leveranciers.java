@@ -1,13 +1,7 @@
 package com.tep10.resource;
 
-import com.tep10.doa.BestelRegelJPA;
-import com.tep10.doa.BestellingJPA;
-import com.tep10.doa.LeverancierJPA;
-import com.tep10.doa.OfferteJPA;
-import com.tep10.model.BestelRegel;
-import com.tep10.model.Bestelling;
-import com.tep10.model.Leverancier;
-import com.tep10.model.Offerte;
+import com.tep10.doa.*;
+import com.tep10.model.*;
 import com.tep10.resource.interfaceApi.LeveranciersApi;
 import com.tep10.util.NotFoundException;
 import org.slf4j.Logger;
@@ -15,10 +9,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.List;
 
 import static com.tep10.resource.Validator.checkNotNull;
@@ -40,8 +36,11 @@ public class Leveranciers implements LeveranciersApi{
     @Autowired
     private BestellingJPA bestellingJPA;
 
-//    @Autowired
-//    private BestelRegelJPA bestelRegelJPA;
+    @Autowired
+    private BestelRegelJPA bestelRegelJPA;
+
+    @Autowired
+    private GoedOntvangstJPA goedOntvangstJPA;
 
     public ResponseEntity<Leverancier> getLeverancier(@PathVariable(required = false) Long levcode) throws NotFoundException {
         Leverancier leverancier = leverancierJPA.findLeverancierByLevcode(levcode);
@@ -69,13 +68,44 @@ public class Leveranciers implements LeveranciersApi{
         return checkNotNull(bestellingen);
     }
 
-    public ResponseEntity<List<BestelRegel>>  getBesteRegelsFromBestelling(@PathVariable Long levcode, @PathVariable Long bestelnr) throws NotFoundException {
-        List<BestelRegel> bestelRegels = leverancierJPA.findLeverancierByLevcode(levcode)
-                .getBestellingen().stream()
-                .filter(best -> best.getBestelnr().equals(bestelnr))
-                .findFirst().get()
-                .getBestelRegels();
+    public ResponseEntity<Bestelling> setBestellingAtLeverancier(@PathVariable Long levcode, @PathVariable Long bestelnr,
+                                                           @RequestBody Bestelling bestelling) throws NotFoundException {
+        if (leverancierJPA.findLeverancierByLevcode(levcode) == null || bestellingJPA.findBestellingByLevcodeAndBestelnr(levcode, bestelnr) != null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else {
+            bestellingJPA.save(bestelling);
+            return new ResponseEntity<>(bestellingJPA.findBestellingByLevcodeAndBestelnr(levcode, bestelnr), HttpStatus.OK);
+        }
+    }
 
+
+    public ResponseEntity<Bestelling> getBestellingFromLeverancier(@PathVariable Long levcode, @PathVariable Long bestelnr) throws NotFoundException {
+        Bestelling bestelling = bestellingJPA.findBestellingByLevcodeAndBestelnr(levcode, bestelnr);
+        return checkNotNull(bestelling);
+    }
+
+    public ResponseEntity<List<BestelRegel>> getBesteRegelsFromBestelling(@PathVariable Long levcode, @PathVariable Long bestelnr) throws NotFoundException {
+            List<BestelRegel> bestelRegels = bestelRegelJPA.findBestelRegelByBestelling_LevcodeAndBestelnr(levcode, bestelnr);
         return checkNotNull(bestelRegels);
     }
+
+    public ResponseEntity<BestelRegel> getBesteRegelFromBestelling(@PathVariable Long levcode, @PathVariable Long bestelnr,
+                                                             @PathVariable Long artcode) throws NotFoundException {
+        BestelRegel bestelRegel = bestelRegelJPA.findBestelRegelByBestelling_LevcodeAndBestelnrAndArtcode(levcode, bestelnr, artcode);
+        return checkNotNull(bestelRegel);
+    }
+
+    public ResponseEntity<List<GoedOntvangst>> getGoederenOntvangstFromBestelRegel(@PathVariable Long levcode, @PathVariable Long bestelnr,
+                                                                             @PathVariable Long artcode) throws NotFoundException {
+        List<GoedOntvangst> goederenOntvangst = goedOntvangstJPA.findGoedOntvangstByBestelRegel_Bestelling_LevcodeAndBestelnrAndArtcode(levcode, bestelnr, artcode);
+        return checkNotNull(goederenOntvangst);
+    }
+
+    public ResponseEntity<GoedOntvangst>  getGoedOntvangstFromBestelRegel(@PathVariable Long levcode, @PathVariable Long bestelnr,
+                                                                        @PathVariable Long artcode, @PathVariable Date ontv_datum) throws NotFoundException {
+        GoedOntvangst goedOntvangst = goedOntvangstJPA.findGoedOntvangstByBestelRegel_Bestelling_LevcodeAndBestelnrAndArtcodeAndOntvdatum(levcode, bestelnr, artcode, ontv_datum);
+        return checkNotNull(goedOntvangst);
+    }
+
+
 }

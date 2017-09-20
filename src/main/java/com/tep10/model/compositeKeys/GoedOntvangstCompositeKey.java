@@ -17,7 +17,7 @@ import java.sql.Date;
 public class GoedOntvangstCompositeKey implements Serializable {
     private Long bestelnr;
     private Long artcode;
-    private Date ontv_datum;
+    private Date ontvdatum;
 
     public GoedOntvangstCompositeKey () {
     }

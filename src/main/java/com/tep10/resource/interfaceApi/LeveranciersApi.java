@@ -1,14 +1,13 @@
 package com.tep10.resource.interfaceApi;
 
-import com.tep10.model.BestelRegel;
-import com.tep10.model.Bestelling;
-import com.tep10.model.Leverancier;
-import com.tep10.model.Offerte;
+import com.tep10.model.*;
 import com.tep10.util.NotFoundException;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -34,6 +33,25 @@ public interface LeveranciersApi {
     ResponseEntity<List<Bestelling>>  getBestellingenFromLeverancier(@PathVariable Long levcode) throws NotFoundException;
 
     @RequestMapping(path = "{levcode}/bestellingen/{bestelnr}", method = RequestMethod.GET)
+    ResponseEntity<Bestelling>  getBestellingFromLeverancier(@PathVariable Long levcode, @PathVariable Long bestelnr) throws NotFoundException;
+
+    @RequestMapping(path = "{levcode}/bestellingen/{bestelnr}", method = RequestMethod.POST)
+    ResponseEntity<Bestelling>  setBestellingAtLeverancier(@PathVariable Long levcode, @PathVariable Long bestelnr,
+                                                           @RequestBody Bestelling bestelling) throws NotFoundException;
+
+    @RequestMapping(path = "{levcode}/bestellingen/{bestelnr}/bestelregels", method = RequestMethod.GET)
     ResponseEntity<List<BestelRegel>>  getBesteRegelsFromBestelling(@PathVariable Long levcode, @PathVariable Long bestelnr) throws NotFoundException;
+
+    @RequestMapping(path = "{levcode}/bestellingen/{bestelnr}/bestelregels/{artcode}", method = RequestMethod.GET)
+    ResponseEntity<BestelRegel>  getBesteRegelFromBestelling(@PathVariable Long levcode, @PathVariable Long bestelnr,
+                                                                   @PathVariable Long artcode) throws NotFoundException;
+
+    @RequestMapping(path = "{levcode}/bestellingen/{bestelnr}/bestelregels/{artcode}/goederenontvangst", method = RequestMethod.GET)
+    ResponseEntity<List<GoedOntvangst>>  getGoederenOntvangstFromBestelRegel(@PathVariable Long levcode, @PathVariable Long bestelnr,
+                                                                             @PathVariable Long artcode) throws NotFoundException;
+
+    @RequestMapping(path = "{levcode}/bestellingen/{bestelnr}/bestelregels/{artcode}/goederenontvangst/{ontv_datum}", method = RequestMethod.GET)
+    ResponseEntity<GoedOntvangst>  getGoedOntvangstFromBestelRegel(@PathVariable Long levcode, @PathVariable Long bestelnr,
+                                                                         @PathVariable Long artcode, @PathVariable Date ontv_datum) throws NotFoundException;
 
 }
