@@ -3,7 +3,7 @@
 <link rel="import" href="../t10-data-table/t10-data-table.html">
 <link rel="import" href="../util/columns.html">
 
-<dom-module id="sub-container">
+<dom-module id="leverancier-details">
 
   <template>
     <style>
@@ -11,7 +11,8 @@
         display: flex;
         flex-wrap: wrap;
         flex-direction: column;
-        margin: 30px;
+        margin-left: 30px;
+        width: 45%;
       }
     </style>
 
@@ -31,7 +32,7 @@
         items=[[items]]
         columns=[[itemColumns]]
         table-name="[[tableName]]"
-        style="margin-top: 30px">
+        on-row-tap="rowCallback">
       </t10-data-table>
     </template>
 
@@ -39,7 +40,7 @@
 
   <script>
     Polymer({
-        is: 'sub-container',
+        is: 'leverancier-details',
         properties: {
           levnaam: String,
           levcode: Number,
@@ -47,24 +48,34 @@
           showTable: Boolean,
           itemColumns: Array,
           tableName: String,
-          tableCall: String
+          tableCall: String,
+          rowCallback: Function
         },
         handleItemRequest(response) {
           this.items = response.detail.response;
         },
-        showBestellingTapped(e) {
+        changeTable(rowCallback, itemColumns, tableName, tableApiCall) {
           this.items = [];
+          this.rowCallback = rowCallback;
           this.showTable = true;
-          this.itemColumns = columns.bestellingen;
-          this.tableName = "Bestellingen van " + this.levnaam;
-          this.tableCall = "http://localhost:8080/leveranciers/" + this.levcode + "/bestellingen";
+          this.itemColumns = itemColumns;
+          this.tableName = tableName;
+          this.tableCall = tableApiCall;
+        },
+        showBestellingTapped(e) {
+          this.changeTable(this.bestellingenRowTap, columns.bestellingen,
+            "Bestellingen van " + this.levnaam,
+            "http://localhost:8080/leveranciers/" + this.levcode + "/bestellingen");
         },
         showOffertesTapped(e) {
-          this.items = [];
-          this.showTable = true;
-          this.itemColumns = columns.offertes;
-          this.tableName = "Offertes van " + this.levnaam;
-          this.tableCall = "http://localhost:8080/leveranciers/" + this.levcode + "/offertes";
+          this.changeTable(this.bestellingenRowTap, columns.offertes,
+            "Offertes van " + this.levnaam,
+            "http://localhost:8080/leveranciers/" + this.levcode + "/offertes");
+        },
+        bestellingenRowTap(e) {
+          this.changeTable(this.bestellingenRowTap, columns.bestelRegels,
+            "Bestelregels van bestelling " + e.detail.item.bestelnr,
+            "<bestellingenRowCall>");
         }
       });
   </script>

@@ -11,11 +11,17 @@
       .action-button{
         margin: 30px;
       }
+      .action-buttons {
+        display: flex;
+        justify-content: center;
+      }
     </style>
 
-    <paper-card heading="[[leverancier]]">
-      <paper-button class="action-button" raised on-tap="tappedBestellingen">Bestellingen</paper-button>
-      <paper-button class="action-button" raised on-tap="tappedOffertes">Offertes</paper-button>
+    <paper-card heading="[[leverancier]]" style="width: 100%;">
+      <div class="action-buttons">
+        <paper-button class="action-button" raised on-tap="tappedBestellingen">Bestellingen</paper-button>
+        <paper-button class="action-button" raised on-tap="tappedOffertes">Offertes</paper-button>
+      </div>
     <paper-card>
 
   </template>
