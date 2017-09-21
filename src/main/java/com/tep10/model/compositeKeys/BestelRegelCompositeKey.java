@@ -18,4 +18,9 @@ public class BestelRegelCompositeKey implements Serializable {
 
     public BestelRegelCompositeKey () {
     }
+
+//    public BestelRegelCompositeKey (Long bestelnr, Long artcode) {
+//        this.bestelnr = bestelnr;
+//        this.artcode = artcode;
+//    }
 }

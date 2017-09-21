@@ -29,11 +29,13 @@ public class Offerte {
     private Float offprijs;
 
 //    @ManyToOne
-//    @JoinColumn(name = "OfferteCompositeKey.artcode")
+//    @MapsId("artcode")
+//    @JoinColumn(name = "artcode")
 //    private Plant plant;
 //
 //    @ManyToOne
-//    @JoinColumn(name = "OfferteCompositeKey.levcode")
+//    @MapsId("levcode")
+//    @JoinColumn(name = "levcode")
 //    private Leverancier leverancier;
 
     public Offerte () {

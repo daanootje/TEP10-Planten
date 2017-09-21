@@ -1,4 +1,4 @@
-package com.tep10.resource;
+package com.tep10.util;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

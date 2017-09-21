@@ -1,5 +1,6 @@
 package com.tep10.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tep10.model.compositeKeys.GoedOntvangstCompositeKey;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -34,7 +34,8 @@ public class Bestelling {
     private String status;
 
 //    @ManyToOne
-//    @JoinColumn(name = "bestelling_levcode", referencedColumnName = "levcode")
+//    @MapsId("levcode")
+//    @JoinColumn(name = "levcode")
 //    private Leverancier leverancier;
 
     @OneToMany(mappedBy = "bestelnr")

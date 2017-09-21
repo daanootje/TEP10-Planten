@@ -2,14 +2,13 @@ package com.tep10.resource;
 
 import com.tep10.doa.*;
 import com.tep10.model.*;
+import com.tep10.model.compositeKeys.BestelRegelCompositeKey;
 import com.tep10.resource.interfaceApi.LeveranciersApi;
 import com.tep10.util.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Date;
 import java.util.List;
 
-import static com.tep10.resource.Validator.checkNotNull;
+import static com.tep10.util.Validator.checkNotNull;
 
 /**
  * Created by UG34QP on 18-9-2017.
@@ -27,20 +26,22 @@ public class Leveranciers implements LeveranciersApi{
 
     private static final Logger log = LoggerFactory.getLogger(Leveranciers.class);
 
-    @Autowired
-    private LeverancierJPA leverancierJPA;
+    private final LeverancierJPA leverancierJPA;
+    private final OfferteJPA offerteJPA;
+    private final BestellingJPA bestellingJPA;
+    private final BestelRegelJPA bestelRegelJPA;
+    private final GoedOntvangstJPA goedOntvangstJPA;
+    private final PlantJPA plantJPA;
 
-    @Autowired
-    private OfferteJPA offerteJPA;
-
-    @Autowired
-    private BestellingJPA bestellingJPA;
-
-    @Autowired
-    private BestelRegelJPA bestelRegelJPA;
-
-    @Autowired
-    private GoedOntvangstJPA goedOntvangstJPA;
+    public Leveranciers (LeverancierJPA leverancierJPA, OfferteJPA offerteJPA, BestellingJPA bestellingJPA,
+                         BestelRegelJPA bestelRegelJPA, GoedOntvangstJPA goedOntvangstJPA, PlantJPA plantJPA) {
+        this.leverancierJPA = leverancierJPA;
+        this.offerteJPA = offerteJPA;
+        this.bestellingJPA = bestellingJPA;
+        this.bestelRegelJPA = bestelRegelJPA;
+        this.goedOntvangstJPA = goedOntvangstJPA;
+        this.plantJPA = plantJPA;
+    }
 
     public ResponseEntity<Leverancier> getLeverancier(@PathVariable(required = false) Long levcode) throws NotFoundException {
         Leverancier leverancier = leverancierJPA.findLeverancierByLevcode(levcode);
@@ -78,7 +79,6 @@ public class Leveranciers implements LeveranciersApi{
         }
     }
 
-
     public ResponseEntity<Bestelling> getBestellingFromLeverancier(@PathVariable Long levcode, @PathVariable Long bestelnr) throws NotFoundException {
         Bestelling bestelling = bestellingJPA.findBestellingByLevcodeAndBestelnr(levcode, bestelnr);
         return checkNotNull(bestelling);
@@ -95,17 +95,39 @@ public class Leveranciers implements LeveranciersApi{
         return checkNotNull(bestelRegel);
     }
 
+    public ResponseEntity<BestelRegel>  setBesteRegelAtBestelling(@PathVariable Long levcode, @PathVariable Long bestelnr,
+                                                           @PathVariable Long artcode, @RequestBody BestelRegel bestelRegel) throws NotFoundException {
+        if (bestellingJPA.findBestellingByBestelnr(bestelnr) == null || plantJPA.findPlantByArtcode(artcode) == null ||
+                bestelRegelJPA.findBestelRegelByBestelling_LevcodeAndBestelnrAndArtcode(levcode, bestelnr, artcode) != null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else {
+            bestelRegelJPA.save(bestelRegel);
+            return new ResponseEntity<>(bestelRegelJPA.findBestelRegelByBestelling_LevcodeAndBestelnrAndArtcode(levcode, bestelnr, artcode), HttpStatus.OK);
+        }
+    }
+
     public ResponseEntity<List<GoedOntvangst>> getGoederenOntvangstFromBestelRegel(@PathVariable Long levcode, @PathVariable Long bestelnr,
                                                                              @PathVariable Long artcode) throws NotFoundException {
         List<GoedOntvangst> goederenOntvangst = goedOntvangstJPA.findGoedOntvangstByBestelRegel_Bestelling_LevcodeAndBestelnrAndArtcode(levcode, bestelnr, artcode);
         return checkNotNull(goederenOntvangst);
     }
 
-    public ResponseEntity<GoedOntvangst>  getGoedOntvangstFromBestelRegel(@PathVariable Long levcode, @PathVariable Long bestelnr,
+    public ResponseEntity<GoedOntvangst> getGoedOntvangstFromBestelRegel(@PathVariable Long levcode, @PathVariable Long bestelnr,
                                                                         @PathVariable Long artcode, @PathVariable Date ontv_datum) throws NotFoundException {
-        GoedOntvangst goedOntvangst = goedOntvangstJPA.findGoedOntvangstByBestelRegel_Bestelling_LevcodeAndBestelnrAndArtcodeAndOntvdatum(levcode, bestelnr, artcode, ontv_datum);
+        GoedOntvangst goedOntvangst = goedOntvangstJPA.findGoedOntvangstByBestelRegel_Bestelling_LevcodeAndBestelnrAndArtcodeAndOntvdatum(levcode, bestelnr,artcode, ontv_datum);
         return checkNotNull(goedOntvangst);
     }
 
+    public ResponseEntity<GoedOntvangst> setGoedOntvangstAtBestelRegel(@PathVariable Long levcode, @PathVariable Long bestelnr,
+                                                                 @PathVariable Long artcode, @PathVariable Date ontv_datum,
+                                                                 @RequestBody GoedOntvangst goedOntvangst) throws NotFoundException {
 
+        if (bestelRegelJPA.findBestelRegelByBestelling_LevcodeAndBestelnrAndArtcode(levcode, bestelnr, artcode) == null ||
+                goedOntvangstJPA.findGoedOntvangstByBestelRegel_Bestelling_LevcodeAndBestelnrAndArtcodeAndOntvdatum(levcode, bestelnr, artcode, ontv_datum) != null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else {
+            goedOntvangstJPA.save(goedOntvangst);
+            return new ResponseEntity<>(goedOntvangstJPA.findGoedOntvangstByBestelRegel_Bestelling_LevcodeAndBestelnrAndArtcodeAndOntvdatum(levcode, bestelnr, artcode, ontv_datum), HttpStatus.OK);
+        }
+    }
 }

@@ -39,9 +39,10 @@ public class BestelRegel {
     @JsonIgnore
     private List<GoedOntvangst> goedOntvangsten = new ArrayList<>();
 
-//    @ManyToOne
-//    @JoinColumn(name = "BestelRegelCompositeKey.artcode")
-//    private Plant plant;
+    @ManyToOne
+    @MapsId("artcode")
+    @JoinColumn(name = "artcode")
+    private Plant plant;
 
     public BestelRegel () {
     }

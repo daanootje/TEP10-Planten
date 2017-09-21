@@ -1,5 +1,6 @@
 package com.tep10.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,10 +28,12 @@ public class Leverancier {
     @Column
     private String woonplaats;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "levcode")
+    @OneToMany(mappedBy = "levcode")
+    @JsonIgnore
     private List<Bestelling> bestellingen = new ArrayList<>();
 
     @OneToMany(mappedBy = "levcode")
+    @JsonIgnore
     private List<Offerte> offertes = new ArrayList<>();
 
     public Leverancier () {}

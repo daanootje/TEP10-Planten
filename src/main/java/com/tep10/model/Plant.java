@@ -1,5 +1,6 @@
 package com.tep10.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -41,9 +42,11 @@ public class Plant {
     private String BTWtype;
 
     @OneToMany(mappedBy = "artcode")
+    @JsonIgnore
     private List<BestelRegel> bestelRegels = new ArrayList<>();
 
     @OneToMany(mappedBy = "artcode")
+    @JsonIgnore
     private List<Offerte> offertes = new ArrayList<>();
 
     public Plant () {

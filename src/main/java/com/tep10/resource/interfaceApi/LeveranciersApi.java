@@ -46,6 +46,10 @@ public interface LeveranciersApi {
     ResponseEntity<BestelRegel>  getBesteRegelFromBestelling(@PathVariable Long levcode, @PathVariable Long bestelnr,
                                                                    @PathVariable Long artcode) throws NotFoundException;
 
+    @RequestMapping(path = "{levcode}/bestellingen/{bestelnr}/bestelregels/{artcode}", method = RequestMethod.POST)
+    ResponseEntity<BestelRegel>  setBesteRegelAtBestelling(@PathVariable Long levcode, @PathVariable Long bestelnr,
+                                                             @PathVariable Long artcode, @RequestBody BestelRegel bestelRegel) throws NotFoundException;
+
     @RequestMapping(path = "{levcode}/bestellingen/{bestelnr}/bestelregels/{artcode}/goederenontvangst", method = RequestMethod.GET)
     ResponseEntity<List<GoedOntvangst>>  getGoederenOntvangstFromBestelRegel(@PathVariable Long levcode, @PathVariable Long bestelnr,
                                                                              @PathVariable Long artcode) throws NotFoundException;
@@ -53,5 +57,11 @@ public interface LeveranciersApi {
     @RequestMapping(path = "{levcode}/bestellingen/{bestelnr}/bestelregels/{artcode}/goederenontvangst/{ontv_datum}", method = RequestMethod.GET)
     ResponseEntity<GoedOntvangst>  getGoedOntvangstFromBestelRegel(@PathVariable Long levcode, @PathVariable Long bestelnr,
                                                                          @PathVariable Long artcode, @PathVariable Date ontv_datum) throws NotFoundException;
+
+    @RequestMapping(path = "{levcode}/bestellingen/{bestelnr}/bestelregels/{artcode}/goederenontvangst/{ontv_datum}", method = RequestMethod.POST)
+    ResponseEntity<GoedOntvangst>  setGoedOntvangstAtBestelRegel(@PathVariable Long levcode, @PathVariable Long bestelnr,
+                                                                   @PathVariable Long artcode, @PathVariable Date ontv_datum,
+                                                                 @RequestBody GoedOntvangst goedOntvangst) throws NotFoundException;
+
 
 }
