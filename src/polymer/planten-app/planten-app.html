@@ -3,6 +3,7 @@
 <link rel="import" href="../bestellingen-element/bestellingen-element.html">
 <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
 <link rel="import" href="../../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../../bower_components/paper-header-panel/paper-header-panel.html">
 
 <dom-module id="planten-app">
 
@@ -18,15 +19,13 @@
         text-align: center;
         animation: fadein 1s;
       }
+      .header {
+        overflow: visible;
+        width: 100vw;
+        magin-left: 0px;
+        background-color: white;
+      }
     </style>
-
-    <app-location route="/asdfasdf"></app-location>
-
-    <app-route
-    route="{{route}}"
-    pattern="/:view"
-    data="{{route.routeData}}"
-    tail="{{route.path}}"></app-route>
 
     <leveranciers-element name="leveranciers" route={{route}}></leveranciers-element>
   </template>

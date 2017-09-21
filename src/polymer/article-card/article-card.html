@@ -9,7 +9,6 @@
         margin-top: 30px;
       }
       .contents {
-        display: block;
         margin-left: 30px;
         margin-right: 30px;
       }
@@ -22,23 +21,34 @@
         display: flex;
         align-items: flex-end;
       }
+      .card-contents {
+        height: 60vh;
+        overflow: scroll;
+      }
+      .card-actions {
+        margin-top: 15px;
+      }
     </style>
 
-    <paper-card style="width: 100%; background-color: #e6ffe6;">
-      <iron-ajax
-      auto
-      url='https://api.gettyimages.com/v3/search/images?fields=id,title,thumb,referral_destinations&sort_order=best&phrase=Kalmoes'
-      params=''
-      handle-as="json"
-      headers='{"Api-key": "bwbfckafyjcbgv88y39jeeaw"}'
-      on-response="handleImageRequest"
-      debounce-duration="300"></iron-ajax>
-      <img class="the-image" src="[[imageUrl]]">
-      <div class="contents">
-        <h3>[[article.plantennaam]]</h3>
-        <p>Soort: [[article.soort]]</p>
-        <p>Kleur: [[article.kleur]]</p>
-        <p>Hoogte: [[article.hoogte]]</p>
+    <paper-card style="width: 100%;" elevation="2">
+      <div class="card-contents">
+        <iron-ajax
+        auto
+        url='https://api.gettyimages.com/v3/search/images?fields=id,title,thumb,referral_destinations&sort_order=best&phrase=Kalmoes'
+        params=''
+        handle-as="json"
+        headers='{"Api-key": "bwbfckafyjcbgv88y39jeeaw"}'
+        on-response="handleImageRequest"
+        debounce-duration="300"></iron-ajax>
+        <img class="the-image" src="[[imageUrl]]">
+        <div class="contents">
+          <h3>[[article.plantennaam]]</h3>
+          <p>Soort: [[article.soort]]</p>
+          <p>Kleur: [[article.kleur]]</p>
+          <p>Hoogte: [[article.hoogte]]</p>
+        </div>
+      </div>
+      <div class="card-actions" style="display: flex;">
         <paper-button class="button-paper" on-tap="goBack" style="background-color: white;" raised>Ga terug</paper-button>
       </div>
     <paper-card>

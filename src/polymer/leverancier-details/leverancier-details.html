@@ -18,7 +18,7 @@
         width: 45%;
       }
       .bla {
-        height:64vh;
+        height:70vh;
       }
     </style>
 
@@ -40,9 +40,10 @@
         items=[[items]]
         columns=[[itemColumns]]
         table-name="[[tableName]]"
+        showAdd="{{showAddButton}}"
         on-row-tap="rowCallback"
         on-plus="add"
-        showAdd="[[showAddButton]]">
+        on-terug="goBack">
       </t10-data-table>
     </template>
 
@@ -80,7 +81,9 @@
           add: Function,
           showAddButton: Boolean,
           object: Object,
-          showObject: Boolean
+          showObject: Boolean,
+          selectedBestelling: Boolean,
+          goBack: Function
         },
         handleItemRequest(response) {
           this.items = response.detail.response;
@@ -88,7 +91,7 @@
         handlePlantRequest(response) {
           this.selectedArticle = response.detail.response;
         },
-        changeTable(rowCallback, itemColumns, tableName, tableApiCall, plusCallback) {
+        changeTable(rowCallback, itemColumns, tableName, tableApiCall, plusCallback, terugCallback) {
           this.showArticle = false;
           this.items = [];
           this.rowCallback = rowCallback;
@@ -100,6 +103,7 @@
           this.tableCall = tableApiCall;
           this.add = plusCallback;
           this.showAddButton = true;//plusCallback != undefined;
+          this.goBack = terugCallback;
         },
         showBestellingTapped(e) {
           this.showTable = false;
@@ -109,8 +113,8 @@
           this.showObject = false;
           this.changeTable(this.bestellingenRowTap, columns.bestellingen,
             "Bestellingen van " + this.levnaam,
-            "http://localhost:8080/leveranciers/" + this.levcode + "/bestellingen",
-            this.addBestelling, true);
+            leveranciersApi.getBestellingenByLevCode(this.levcode),
+            this.addBestelling);
         },
         showOffertesTapped(e) {
           this.showTable = false;
@@ -120,13 +124,14 @@
           this.showObject = false;
           this.changeTable(this.showPlant, columns.offertes,
             "Offertes van " + this.levnaam,
-            "http://localhost:8080/leveranciers/" + this.levcode + "/offertes")
+            leveranciersApi.getOffertesByLevCode(this.levcode))
         },
         bestellingenRowTap(e) {
+          this.selectedBestelling = e.detail.item;
           this.changeTable(this.showPlant, columns.bestelRegels,
             "Bestelregels van bestelling " + e.detail.item.bestelnr,
-            "http://localhost:8080/leveranciers/" + this.levcode + "/bestellingen/" + e.detail.item.bestelnr + "/bestelregels",
-            this.addBestelregel);
+            leveranciersApi.getBestelregels(this.levcode, e.detail.item.bestelnr),
+            this.addBestelregel, this.showBestellingTapped);
         },
         articleBackCallback() {
           this.showTable = true;
@@ -137,7 +142,7 @@
           this.showArticle = true;
           this.showTable = false;
           this.showObject = false;
-          this.plantCall = "http://localhost:8080/planten/" + e.detail.item.artcode;
+          this.plantCall = leveranciersApi.getPlant(e.detail.item.artcode);
         },
         addBestelling() {
           this.showTable = false;
@@ -146,6 +151,7 @@
           this.object = {
             "header": "Nieuwe bestelling",
             "levcode": this.levcode,
+            "url": leveranciersApi.getBestellingenByLevCode(this.levcode),
             "categories": [
               {
                 "name": "besteldat",
@@ -169,7 +175,6 @@
           this.showTable = false;
           this.showArticle = false;
           this.showObject = true;
-          console.log(e.detail)
           this.object = {
             "categories": [
               {
@@ -184,7 +189,33 @@
           };
         },
         addBestelregel(e) {
-          console.log('Bestelregel')
+          this.showTable = false;
+          this.showArticle = false;
+          this.showObject = true;
+          this.object = {
+            "header": "Nieuwe bestelregel voor bestelling " + this.selectedBestelling.bestelnr,
+            "levcode": this.levcode,
+            "url": leveranciersApi.getBestelregels(this.levcode, this.selectedBestelling.bestelnr),
+            "categories": [
+              {
+                "name": "artcode",
+                "value": "",
+                "label": "Artikel",
+                "autocomplete": true,
+                "sourceCall": leveranciersApi.getPlanten()
+              },
+              {
+                "name": "aantal",
+                "value": "",
+                "label": "Aantal"
+              },
+              {
+                "name": "bestelprijs",
+                "value": "",
+                "label": "Prijs"
+              }
+            ]
+          };
         }
       });
   </script>

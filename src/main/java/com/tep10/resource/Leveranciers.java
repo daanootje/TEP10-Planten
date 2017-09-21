@@ -92,6 +92,7 @@ public class Leveranciers implements LeveranciersApi{
     public ResponseEntity<BestelRegel>  setBesteRegelsAtBestelling(@PathVariable Long levcode, @PathVariable Long bestelnr,
                                                                    @RequestBody BestelRegel bestelRegel) throws NotFoundException{
         Bestelling bestelling = bestellingJPA.findBestellingByLevcodeAndBestelnr(levcode, bestelnr);
+        bestelRegel.setBestelnr(bestelling.getBestelnr());
         bestelling.getBestelRegels().add(bestelRegel);
         bestellingJPA.save(bestelling);
         return checkNotNull(bestelRegel);

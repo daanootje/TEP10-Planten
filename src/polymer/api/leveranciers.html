@@ -8,6 +8,19 @@
     },
     getBestellingenByLevCode(levcode) {
       return config.apiUrl + "/leveranciers/" + levcode + "/bestellingen";
+    },
+    getOffertesByLevCode(levcode) {
+      return config.apiUrl + "/leveranciers/" + levcode + "/offertes";
+    },
+    getBestelregels(levcode, bestelnr) {
+      return config.apiUrl + "/leveranciers/" + levcode + "/bestellingen/" + bestelnr + "/bestelregels"
+    },
+    getPlant(artcode) {
+      return config.apiUrl + "/planten/" + artcode
+    },
+    getPlanten() {
+      return config.apiUrl + "/planten"
     }
+
   }
 </script>
