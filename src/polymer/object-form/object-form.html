@@ -10,8 +10,8 @@
     <style>
       :host {
         display: flex;
-        margin-top: 30px;
-        animation: strollin 1s, fadein 1s;
+        height: 72%;
+        animation: fadein 1s;
       }
       .form {
         padding: 30px
@@ -22,8 +22,19 @@
         background-color: white;
         margin-top: 15px;
       }
+      paper-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 50%;
+        background-color: white;
+      }
       .card-content {
-        height: 48vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        height: 70%;
+        overflow-y: auto;
       }
       .card-actions {
         margin-bottom:15px;

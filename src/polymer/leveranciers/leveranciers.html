@@ -24,32 +24,19 @@
       :host {
         display: flex;
         flex-wrap: wrap;
-        justify-content: flex-start;
-        margin: 20px;
+        justify-content:space-between;
         animation: fadein 4s;
         height: 93vh
       }
       .leveranciers {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         width: 50%;
-        overflow: hidden;
         background-color: white;
       }
       .banner: {
-        width: 25%;
-        clip: rect(0px,60px,200px,0px);
-        overflow: hidden;
-      }
-      .leveranciers-content {
-      }
-      .bestellingen{
-        margin: 30px;
-      }
-      .paper-button {
-        background-color: white;
-        margin: 10px;
-      }
-      .card-actions {
-        /*float: right;*/
+        overflow-x: hidden;
       }
       h3 {
         margin-left: 30px;
@@ -57,16 +44,24 @@
         font-size: 17px;
       }
       .card-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        height: 75%;
         overflow-y: auto;
+      }
+      paper-button{
+        margin-top: 15px;
+        margin-bottom: 15px;
       }
     </style>
 
     <paper-card class="leveranciers" elevation="2">
-      <div class="banner">
+      <div style="overflow-x: hidden">
         <img src="../resources/images/young_plants_banner_shorter.jpg"/>
       </div>
       <h3>Leveranciers</h3>
-      <div class="card-content leveranciers-content">
+      <div class="card-content">
         <paper-datatable id="datatable1" data="{{leveranciers}}" on-row-tap="handleRowTap">
             <paper-datatable-column cell-style="color:gray;" header="Code" property="levcode" sortable>
             </paper-datatable-column>
@@ -84,7 +79,7 @@
       </div>
     </paper-card>
 
-    <template id="leverancierDetailsIf" is="dom-if" if="[[showActions]]" restamp="true">
+    <template class="leveranciers-details" id="leverancierDetailsIf" is="dom-if" if="[[showActions]]" restamp="true">
       <leverancier-details levnaam=[[selection.levnaam]] levcode=[[selection.levcode]]></leverancier-details>
     </template>
 
