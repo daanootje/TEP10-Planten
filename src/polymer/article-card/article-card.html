@@ -33,6 +33,13 @@
       .card-actions {
         margin-top: 15px;
       }
+      .name {
+        font-weight: normal;
+        color: black;
+      }
+      .kind {
+        color: gray;
+      }
     </style>
 
     <paper-card style="width: 100%;" elevation="2" heading="[[capitalizeFirstLetter(article.plantennaam)]]">
@@ -49,9 +56,9 @@
           <img class="the-image" src="[[imageUrl]]">
         </paper-card>
         <div class="contents">
-          <p>Soort: [[capitalizeFirstLetter(article.soort)]]</p>
-          <p>Kleur: [[capitalizeFirstLetter(article.kleur)]]</p>
-          <p>Hoogte: [[article.hoogte]] cm</p>
+          <p><span class="kind">Soort:</span> <span class="name">[[capitalizeFirstLetter(article.soort)]]</span></p>
+          <p><span class="kind">Kleur:</span> <span class="name">[[capitalizeFirstLetter(article.kleur)]]</span></p>
+          <p><span class="kind">Hoogte:</span> <span class="name">[[article.hoogte]] cm</span></p>
         </div>
       </div>
       <div class="card-actions" style="display: flex;">
