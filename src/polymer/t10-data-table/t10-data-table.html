@@ -1,15 +1,33 @@
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/paper-datatable/paper-datatable.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 
 <dom-module id="t10-data-table">
   <template>
 
     <style>
+    @keyframes fadein {
+        from {
+            opacity:0;
+        }
+        to {
+            opacity:1;
+        }
+    }
+    @keyframes strollin {
+        from {
+            margin-left: 200px;
+        }
+        to {
+            opacity:1;
+        }
+    }
       :host {
         display: flex;
         margin-top: 30px;
         width: 100%;
         background-color: #e6ffe6;
+        animation: strollin 1s, fadein 1s;
       }
       .data-table-card {
         width: 100%;
@@ -19,6 +37,7 @@
 
     <paper-card heading="{{tableName}}" class="data-table-card" style="background-color: #e6ffe6;">
       <div class="card-content">
+        <paper-icon-button icon="star" on-tap="plusTapped"></paper-icon-button>
         <paper-datatable id="datatable1" data="{{items}}">
           <template is="dom-repeat" items="{{columns}}">
             <paper-datatable-column
@@ -48,6 +67,9 @@
           value: []
         },
         tableName: String
+      },
+      plusTapped(e) {
+        this.fire('plus');
       }
     })
 

@@ -4,6 +4,7 @@
 <link rel="import" href="../util/columns.html">
 <link rel="import" href="../util/functions.html">
 <link rel="import" href="../article-card/article-card.html">
+<link rel="import" href="../object-form/object-form.html">
 
 <dom-module id="leverancier-details">
 
@@ -17,7 +18,7 @@
         width: 45%;
       }
       .bla {
-        height:60vh;
+        height:64vh;
       }
     </style>
 
@@ -25,7 +26,8 @@
     leverancier=[[levnaam]]
     on-show-bestelling="showBestellingTapped"
     on-show-offertes="showOffertesTapped"></leverancier-actions>
-    <template is="dom-if" if="[[showTable]]" id="dataTableIf">
+
+    <template is="dom-if" if="[[showTable]]" id="dataTableIf" restamp="true">
       <iron-ajax
       auto
       url='[[tableCall]]'
@@ -38,9 +40,12 @@
         items=[[items]]
         columns=[[itemColumns]]
         table-name="[[tableName]]"
-        on-row-tap="rowCallback">
+        on-row-tap="rowCallback"
+        on-plus="add"
+        showAdd="[[showAddButton]]">
       </t10-data-table>
     </template>
+
     <template is="dom-if" if="[[showArticle]]" restamp="true">
       <iron-ajax
       auto
@@ -50,6 +55,10 @@
       on-response="handlePlantRequest"
       debounce-duration="300"></iron-ajax>
       <article-card class="bla" article=[[selectedArticle]] on-button-tap="articleBackCallback"></article-card>
+    </template>
+
+    <template is="dom-if" if="[[showObject]]" restamp="true">
+      <object-form class="bla" object=[[object]]></object-form>
     </template>
 
   </template>
@@ -67,7 +76,11 @@
           tableCall: String,
           rowCallback: Function,
           selectedArticle: Object,
-          plantCall: String
+          plantCall: String,
+          add: Function,
+          showAddButton: Boolean,
+          object: Object,
+          showObject: Boolean
         },
         handleItemRequest(response) {
           this.items = response.detail.response;
@@ -75,7 +88,7 @@
         handlePlantRequest(response) {
           this.selectedArticle = response.detail.response;
         },
-        changeTable(rowCallback, itemColumns, tableName, tableApiCall) {
+        changeTable(rowCallback, itemColumns, tableName, tableApiCall, plusCallback) {
           this.showArticle = false;
           this.items = [];
           this.rowCallback = rowCallback;
@@ -85,21 +98,31 @@
           this.set('itemColumns', itemColumns);
           this.tableName = tableName;
           this.tableCall = tableApiCall;
+          this.add = plusCallback;
+          this.showAddButton = true;//plusCallback != undefined;
         },
         showBestellingTapped(e) {
+          this.showTable = false;
+          this.$.dataTableIf.render();
+          this.showTable = true;
           this.changeTable(this.bestellingenRowTap, columns.bestellingen,
             "Bestellingen van " + this.levnaam,
-            "http://localhost:8080/leveranciers/" + this.levcode + "/bestellingen");
+            "http://localhost:8080/leveranciers/" + this.levcode + "/bestellingen",
+            this.addBestelling, true);
         },
         showOffertesTapped(e) {
+          this.showTable = false;
+          this.$.dataTableIf.render();
+          this.showTable = true;
           this.changeTable(this.showPlant, columns.offertes,
             "Offertes van " + this.levnaam,
-            "http://localhost:8080/leveranciers/" + this.levcode + "/offertes");
+            "http://localhost:8080/leveranciers/" + this.levcode + "/offertes")
         },
         bestellingenRowTap(e) {
           this.changeTable(this.showPlant, columns.bestelRegels,
             "Bestelregels van bestelling " + e.detail.item.bestelnr,
-            "http://localhost:8080/leveranciers/" + this.levcode + "/bestellingen/" + e.detail.item.bestelnr);
+            "http://localhost:8080/leveranciers/" + this.levcode + "/bestellingen/" + e.detail.item.bestelnr + "/bestelregels",
+            this.addBestelregel);
         },
         articleBackCallback() {
           this.showTable = true;
@@ -108,7 +131,52 @@
         showPlant(e) {
           this.showArticle = true;
           this.showTable = false;
+          this.showObject = false;
           this.plantCall = "http://localhost:8080/planten/" + e.detail.item.artcode;
+        },
+        addBestelling() {
+          this.showTable = false;
+          this.showArticle = false;
+          this.showObject = true;
+          this.object = {
+            "header": "Nieuwe bestelling",
+            "levcode": this.levcode,
+            "categories": [
+              {
+                "name": "besteldat",
+                "value": ""
+              },
+              {
+                "name": "leverdat",
+                "value": ""
+              },
+              {
+                "name": "bedrag",
+                "value": ""
+              }
+            ]
+          };
+        },
+        editBestelling(e) {
+          this.showTable = false;
+          this.showArticle = false;
+          this.showObject = true;
+          console.log(e.detail)
+          this.object = {
+            "categories": [
+              {
+                "name": "Leverdatum",
+                "value": e.detail.item.leverdat
+              },
+              {
+                "name": "Bedrag",
+                "value": e.detail.item.bedrag
+              }
+            ]
+          };
+        },
+        addBestelregel(e) {
+          console.log('Bestelregel')
         }
       });
   </script>

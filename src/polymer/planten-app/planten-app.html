@@ -16,6 +16,7 @@
         color: white;
         text-shadow: 1px 2px 5px black;
         text-align: center;
+        animation: fadein 1s;
       }
     </style>
 
@@ -27,8 +28,6 @@
     data="{{route.routeData}}"
     tail="{{route.path}}"></app-route>
 
-    <h1>Plantenlust</h1>
-    
     <leveranciers-element name="leveranciers" route={{route}}></leveranciers-element>
   </template>
 

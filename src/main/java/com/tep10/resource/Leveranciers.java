@@ -68,14 +68,11 @@ public class Leveranciers implements LeveranciersApi{
         return checkNotNull(bestellingen);
     }
 
-    public ResponseEntity<Bestelling> setBestellingAtLeverancier(@PathVariable Long levcode, @PathVariable Long bestelnr,
-                                                           @RequestBody Bestelling bestelling) throws NotFoundException {
-        if (leverancierJPA.findLeverancierByLevcode(levcode) == null || bestellingJPA.findBestellingByLevcodeAndBestelnr(levcode, bestelnr) != null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } else {
-            bestellingJPA.save(bestelling);
-            return new ResponseEntity<>(bestellingJPA.findBestellingByLevcodeAndBestelnr(levcode, bestelnr), HttpStatus.OK);
-        }
+    public ResponseEntity<Bestelling> setBestellingAtLeverancier(@PathVariable Long levcode, @RequestBody Bestelling bestelling) throws NotFoundException {
+        Leverancier leverancier = leverancierJPA.findLeverancierByLevcode(levcode);
+        leverancier.getBestellingen().add(bestelling);
+        leverancierJPA.save(leverancier);
+        return checkNotNull(bestelling);
     }
 
 
