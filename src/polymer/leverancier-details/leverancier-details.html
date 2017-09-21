@@ -58,7 +58,7 @@
     </template>
 
     <template is="dom-if" if="[[showObject]]" restamp="true">
-      <object-form class="bla" object=[[object]]></object-form>
+      <object-form class="bla" object=[[object]] on-button-tap="articleBackCallback"></object-form>
     </template>
 
   </template>
@@ -105,6 +105,8 @@
           this.showTable = false;
           this.$.dataTableIf.render();
           this.showTable = true;
+          this.showArticle = false;
+          this.showObject = false;
           this.changeTable(this.bestellingenRowTap, columns.bestellingen,
             "Bestellingen van " + this.levnaam,
             "http://localhost:8080/leveranciers/" + this.levcode + "/bestellingen",
@@ -114,6 +116,8 @@
           this.showTable = false;
           this.$.dataTableIf.render();
           this.showTable = true;
+          this.showArticle = false;
+          this.showObject = false;
           this.changeTable(this.showPlant, columns.offertes,
             "Offertes van " + this.levnaam,
             "http://localhost:8080/leveranciers/" + this.levcode + "/offertes")
@@ -127,6 +131,7 @@
         articleBackCallback() {
           this.showTable = true;
           this.showArticle = false;
+          this.showObject = false;
         },
         showPlant(e) {
           this.showArticle = true;
@@ -144,15 +149,18 @@
             "categories": [
               {
                 "name": "besteldat",
-                "value": ""
+                "value": "",
+                "label": "Besteldatum (yyyy-mm-dd)"
               },
               {
                 "name": "leverdat",
-                "value": ""
+                "value": "",
+                "label": "Leverdatum (yyyy-mm-dd)"
               },
               {
                 "name": "bedrag",
-                "value": ""
+                "value": "",
+                "label": "Bedrag"
               }
             ]
           };

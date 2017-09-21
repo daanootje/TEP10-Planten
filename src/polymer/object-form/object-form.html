@@ -9,9 +9,15 @@
       :host {
         display: flex;
         margin-top: 30px;
+        animation: strollin 1s, fadein 1s;
       }
       .form {
         padding: 30px
+      }
+      .submit-button {
+        float:right;
+        background-color: white;
+        margin-top:30px;
       }
     </style>
 
@@ -19,9 +25,9 @@
       <iron-form>
       <form id="iron-form" class="form">
         <template is="dom-repeat" items="{{object.categories}}">
-          <paper-input name="{{item.name}}" label="{{item.name}}" value="{{item.value}}"></paper-input>
+          <paper-input name="{{item.name}}" label="{{item.label}}" value="{{item.value}}"></paper-input>
         </template>
-        <paper-button on-tap="save">go</paper-button>
+        <paper-button class="submit-button" on-tap="save" raised>opslaan</paper-button>
       </form>
     </iron-form>
     <paper-card>
@@ -35,9 +41,6 @@
           object: Object,
           imageUrl: String
         },
-        goBack() {
-          this.fire("button-tap");
-        },
         save() {
           var form = document.getElementById('iron-form');
           var newObject = {};
@@ -49,15 +52,11 @@
               contentType: 'application/json',
               data: JSON.stringify(newObject),
               dataType: 'json',
-              success: function(data){
-                 console.log("asdfasdf");
-              },
-              error: function(e){
-                  console.log(e);
-              },
               processData: false,
               type: 'POST',
               url: "http://localhost:8080/leveranciers/" + this.object.levcode + "/bestellingen"
+          }).done(a => {
+            this.fire("button-tap");
           });
         }
       });
