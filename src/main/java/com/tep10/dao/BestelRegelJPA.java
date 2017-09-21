@@ -1,10 +1,8 @@
-package com.tep10.doa;
+package com.tep10.dao;
 
 import com.tep10.model.BestelRegel;
-import com.tep10.model.Bestelling;
 import com.tep10.model.compositeKeys.BestelRegelCompositeKey;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 
 import java.util.List;
