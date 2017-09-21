@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
@@ -21,26 +22,31 @@ import static com.tep10.resource.Validator.checkNotNull;
 /**
  * Created by UG34QP on 18-9-2017.
  */
-@RestController
+@Component
 public class Leveranciers implements LeveranciersApi{
 
     private static final Logger log = LoggerFactory.getLogger(Leveranciers.class);
 
-    private final LeverancierJPA leverancierJPA;
-    private final OfferteJPA offerteJPA;
-    private final BestellingJPA bestellingJPA;
-    private final BestelRegelJPA bestelRegelJPA;
-    private final GoedOntvangstJPA goedOntvangstJPA;
-
     @Autowired
-    public Leveranciers (LeverancierJPA leverancierJPA, OfferteJPA offerteJPA, BestellingJPA bestellingJPA,
-                         BestelRegelJPA bestelRegelJPA, GoedOntvangstJPA goedOntvangstJPA) {
-        this.leverancierJPA = leverancierJPA;
-        this.offerteJPA = offerteJPA;
-        this.bestellingJPA = bestellingJPA;
-        this.bestelRegelJPA = bestelRegelJPA;
-        this.goedOntvangstJPA = goedOntvangstJPA;
-    }
+    private LeverancierJPA leverancierJPA;
+    @Autowired
+    private  OfferteJPA offerteJPA;
+    @Autowired
+    private  BestellingJPA bestellingJPA;
+    @Autowired
+    private  BestelRegelJPA bestelRegelJPA;
+    @Autowired
+    private GoedOntvangstJPA goedOntvangstJPA;
+
+//    @Autowired
+//    public Leveranciers (LeverancierJPA leverancierJPA, OfferteJPA offerteJPA, BestellingJPA bestellingJPA,
+//                         BestelRegelJPA bestelRegelJPA, GoedOntvangstJPA goedOntvangstJPA) {
+//        this.leverancierJPA = leverancierJPA;
+//        this.offerteJPA = offerteJPA;
+//        this.bestellingJPA = bestellingJPA;
+//        this.bestelRegelJPA = bestelRegelJPA;
+//        this.goedOntvangstJPA = goedOntvangstJPA;
+//    }
 
     public ResponseEntity<Leverancier> getLeverancier(@PathVariable(required = false) Long levcode) throws NotFoundException {
         Leverancier leverancier = leverancierJPA.findLeverancierByLevcode(levcode);
