@@ -7,6 +7,8 @@
       :host {
         display: flex;
         margin-top: 30px;
+        animation: strollin 1s, fadein 1s;
+        width: 100%;
       }
       .contents {
         margin-left: 30px;
@@ -22,15 +24,18 @@
         align-items: flex-end;
       }
       .card-contents {
-        height: 60vh;
+        display: flex;
+        height: 50vh;
         overflow: scroll;
+        align-items: center;
+        justify-content: center;
       }
       .card-actions {
         margin-top: 15px;
       }
     </style>
 
-    <paper-card style="width: 100%;" elevation="2">
+    <paper-card style="width: 100%;" elevation="2" heading="[[capitalizeFirstLetter(article.plantennaam)]]">
       <div class="card-contents">
         <iron-ajax
         auto
@@ -40,16 +45,17 @@
         headers='{"Api-key": "bwbfckafyjcbgv88y39jeeaw"}'
         on-response="handleImageRequest"
         debounce-duration="300"></iron-ajax>
-        <img class="the-image" src="[[imageUrl]]">
+        <paper-card elevation="2">
+          <img class="the-image" src="[[imageUrl]]">
+        </paper-card>
         <div class="contents">
-          <h3>[[article.plantennaam]]</h3>
-          <p>Soort: [[article.soort]]</p>
-          <p>Kleur: [[article.kleur]]</p>
-          <p>Hoogte: [[article.hoogte]]</p>
+          <p>Soort: [[capitalizeFirstLetter(article.soort)]]</p>
+          <p>Kleur: [[capitalizeFirstLetter(article.kleur)]]</p>
+          <p>Hoogte: [[article.hoogte]] cm</p>
         </div>
       </div>
       <div class="card-actions" style="display: flex;">
-        <paper-button class="button-paper" on-tap="goBack" style="background-color: white;" raised>Ga terug</paper-button>
+        <paper-button class="button-paper" on-tap="goBack" style="background-color: white; margin-top: 15px;" raised>Ga terug</paper-button>
       </div>
     <paper-card>
 
@@ -60,7 +66,10 @@
         is: 'article-card',
         properties: {
           article: Object,
-          imageUrl: String
+          imageUrl: {
+            type: String,
+            value: "http://www.ikea.com/us/en/images/products/ravenea-potted-plant__0121015_PE277828_S4.JPG"
+          }
         },
         goBack() {
           this.fire("button-tap");
@@ -71,7 +80,10 @@
           } else {
             this.imageUrl = "http://www.ikea.com/us/en/images/products/ravenea-potted-plant__0121015_PE277828_S4.JPG";
           }
-        }
+        },
+        capitalizeFirstLetter(string) {
+          return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+        },
       });
   </script>
 </dom-module>

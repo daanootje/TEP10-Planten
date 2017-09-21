@@ -47,7 +47,7 @@
       </t10-data-table>
     </template>
 
-    <template is="dom-if" if="[[showArticle]]" restamp="true">
+    <template id="articleIf" is="dom-if" if="[[showArticle]]" restamp="true">
       <iron-ajax
       auto
       url='[[plantCall]]'
@@ -139,6 +139,8 @@
           this.showObject = false;
         },
         showPlant(e) {
+          this.showArticle = false;
+          this.$.articleIf.render();
           this.showArticle = true;
           this.showTable = false;
           this.showObject = false;
