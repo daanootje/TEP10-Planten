@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.persistence.GeneratedValue;
 import java.io.Serializable;
 
 /**
@@ -13,7 +14,9 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Data
 public class BestelRegelCompositeKey implements Serializable {
+    @GeneratedValue
     private Long bestelnr;
+    @GeneratedValue
     private Long artcode;
 
     public BestelRegelCompositeKey () {

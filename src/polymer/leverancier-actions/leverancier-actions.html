@@ -10,16 +10,17 @@
         animation: fadein 1s;
       }
       .action-button{
-        margin: 30px;
+        margin-bottom: 0px;
+        margin-top: 15px;
       }
       .action-buttons {
         display: flex;
-        justify-content: center;
+        justify-content:center;
       }
     </style>
 
-    <paper-card heading="[[leverancier]]" style="width: 100%; background-color: #e6ffe6;">
-      <div class="action-buttons">
+    <paper-card heading="[[leverancier]]" style="width: 100%" elevation="2">
+      <div class="card-actions action-buttons">
         <paper-button class="action-button" raised on-tap="tappedBestellingen" style="background-color: white;">Bestellingen</paper-button>
         <paper-button class="action-button" raised on-tap="tappedOffertes" style="background-color: white;">Offertes</paper-button>
       </div>

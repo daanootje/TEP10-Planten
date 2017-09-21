@@ -26,18 +26,24 @@
         display: flex;
         margin-top: 30px;
         width: 100%;
-        background-color: #e6ffe6;
+        background-color: white;
         animation: strollin 1s, fadein 1s;
       }
       .data-table-card {
         width: 100%;
         overflow: scroll;
       }
+      .card-content {
+        height: 46vh;
+        overflow: scroll;
+      }
+      .card-actions {
+        margin-top: 15px;
+      }
     </style>
 
-    <paper-card heading="{{tableName}}" class="data-table-card" style="background-color: #e6ffe6;">
+    <paper-card heading="{{tableName}}" class="data-table-card" elevation="2">
       <div class="card-content">
-        <paper-icon-button icon="star" on-tap="plusTapped"></paper-icon-button>
         <paper-datatable id="datatable1" data="{{items}}">
           <template is="dom-repeat" items="{{columns}}">
             <paper-datatable-column
@@ -48,6 +54,10 @@
             </paper-datatable-column>
           </template>
         </paper-datatable>
+      </div>
+      <div class="card-actions">
+        <paper-button on-tap="plusTapped" raised style="background-color: white; margin-top:15px">Nieuw</paper-button>
+        <paper-button on-tap="terugTapped" raised style="background-color: white; margin-top:15px">Ga Terug</paper-button>
       </div>
     </paper-card>
 
@@ -70,6 +80,9 @@
       },
       plusTapped(e) {
         this.fire('plus');
+      },
+      terugTapped(e) {
+        this.fire('terug');
       }
     })
 

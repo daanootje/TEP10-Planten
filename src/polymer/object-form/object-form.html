@@ -1,5 +1,7 @@
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../../bower_components/vaadin-combo-box/vaadin-combo-box.html">
 <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 
 <dom-module id="object-form">
@@ -9,34 +11,66 @@
       :host {
         display: flex;
         margin-top: 30px;
+        animation: strollin 1s, fadein 1s;
       }
       .form {
         padding: 30px
       }
+      .submit-button {
+        display:block;
+        float:right;
+        background-color: white;
+        margin-top: 15px;
+      }
+      .card-content {
+        height: 48vh;
+      }
+      .card-actions {
+        margin-bottom:15px;
+      }
+
     </style>
 
-    <paper-card heading="{{object.header}}" style="width: 100%; background-color: #e6ffe6;">
-      <iron-form>
-      <form id="iron-form" class="form">
-        <template is="dom-repeat" items="{{object.categories}}">
-          <paper-input name="{{item.name}}" label="{{item.name}}" value="{{item.value}}"></paper-input>
-        </template>
-        <paper-button on-tap="save">go</paper-button>
-      </form>
-    </iron-form>
+    <paper-card heading="{{object.header}}" style="width: 100%;" elevation="2">
+      <div class="card-content">
+        <iron-form>
+        <form id="iron-form" class="form">
+          <template is="dom-repeat" items="{{object.categories}}">
+            <template is="dom-if" if="{{item.autocomplete}}">
+              <iron-ajax
+              auto
+              url='[[item.sourceCall]]'
+              params=''
+              handle-as="json"
+              on-response="handleRequest"
+              debounce-duration="300"></iron-ajax>
+              <vaadin-combo-box name="{{item.name}}" id="autocomplete" label="{{item.label}}" items={{source}} item-value-path="artcode" item-label-path="artcode">
+                <template style="font-family: 'Source Sans Pro', sans-serif;">
+                   [[item.plantennaam]]
+                 </template>
+              </vaadin-combo-box>
+            </template>
+            <template is="dom-if" if="{{!item.autocomplete}}">
+              <paper-input name="{{item.name}}" label="{{item.label}}" value="{{item.value}}"></paper-input>
+            </template>
+          </template>
+        </form>
+      </iron-form>
+    </div>
+    <div class="card-actions" style="display: flex;">
+      <paper-button class="submit-button" on-tap="save" raised>opslaan</paper-button>
+      <paper-button class="submit-button" on-tap="goBack" raised>Ga terug</paper-button>
+    </div>
     <paper-card>
 
   </template>
 
   <script>
-    Polymer({
+    var b = Polymer({
         is: 'object-form',
         properties: {
           object: Object,
-          imageUrl: String
-        },
-        goBack() {
-          this.fire("button-tap");
+          url: String
         },
         save() {
           var form = document.getElementById('iron-form');
@@ -49,16 +83,18 @@
               contentType: 'application/json',
               data: JSON.stringify(newObject),
               dataType: 'json',
-              success: function(data){
-                 console.log("asdfasdf");
-              },
-              error: function(e){
-                  console.log(e);
-              },
               processData: false,
               type: 'POST',
-              url: "http://localhost:8080/leveranciers/" + this.object.levcode + "/bestellingen"
+              url: this.object.url
+          }).done(a => {
+            this.fire("button-tap");
           });
+        },
+        handleRequest(response) {
+          this.source = response.detail.response
+        },
+        goBack() {
+          this.fire("button-tap");
         }
       });
   </script>

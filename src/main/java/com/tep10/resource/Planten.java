@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 import static com.tep10.resource.Validator.checkNotNull;
 
 /**
@@ -27,6 +29,10 @@ public class Planten implements PlantenApi {
     public ResponseEntity<Plant> getPlant(@PathVariable Long artcode) throws NotFoundException {
         Plant plant = plantJPA.findPlantByArtcode(artcode);
         return checkNotNull(plant);
+    }
+
+    public ResponseEntity<List<Plant>> getPlants() throws NotFoundException {
+        return checkNotNull(plantJPA.findAll());
     }
 
 }
