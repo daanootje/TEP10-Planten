@@ -19,10 +19,13 @@ import java.sql.Date;
 @Data
 public class GoedOntvangst {
     @Id
+    @GeneratedValue
     private Long bestelnr;
     @Id
+    @GeneratedValue
     private Long artcode;
     @Id
+    @GeneratedValue
     @Column(name="ontv_datum", unique = true, nullable = false)
     private Date ontvdatum;
     @Column

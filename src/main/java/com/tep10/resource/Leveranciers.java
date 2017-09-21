@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.ws.Response;
 import java.sql.Date;
 import java.util.List;
 
@@ -69,12 +70,14 @@ public class Leveranciers implements LeveranciersApi{
     }
 
     public ResponseEntity<Bestelling> setBestellingAtLeverancier(@PathVariable Long levcode, @RequestBody Bestelling bestelling) throws NotFoundException {
+        if (leverancierJPA.findLeverancierByLevcode(levcode) == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         Leverancier leverancier = leverancierJPA.findLeverancierByLevcode(levcode);
         leverancier.getBestellingen().add(bestelling);
         leverancierJPA.save(leverancier);
         return checkNotNull(bestelling);
     }
-
 
     public ResponseEntity<Bestelling> getBestellingFromLeverancier(@PathVariable Long levcode, @PathVariable Long bestelnr) throws NotFoundException {
         Bestelling bestelling = bestellingJPA.findBestellingByLevcodeAndBestelnr(levcode, bestelnr);
@@ -84,6 +87,14 @@ public class Leveranciers implements LeveranciersApi{
     public ResponseEntity<List<BestelRegel>> getBesteRegelsFromBestelling(@PathVariable Long levcode, @PathVariable Long bestelnr) throws NotFoundException {
             List<BestelRegel> bestelRegels = bestelRegelJPA.findBestelRegelByBestelling_LevcodeAndBestelnr(levcode, bestelnr);
         return checkNotNull(bestelRegels);
+    }
+
+    public ResponseEntity<BestelRegel>  setBesteRegelsAtBestelling(@PathVariable Long levcode, @PathVariable Long bestelnr,
+                                                                   @RequestBody BestelRegel bestelRegel) throws NotFoundException{
+        Bestelling bestelling = bestellingJPA.findBestellingByLevcodeAndBestelnr(levcode, bestelnr);
+        bestelling.getBestelRegels().add(bestelRegel);
+        bestellingJPA.save(bestelling);
+        return checkNotNull(bestelRegel);
     }
 
     public ResponseEntity<BestelRegel> getBesteRegelFromBestelling(@PathVariable Long levcode, @PathVariable Long bestelnr,

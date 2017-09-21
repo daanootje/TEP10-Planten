@@ -6,6 +6,7 @@ import com.tep10.model.compositeKeys.BestelRegelCompositeKey;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -22,8 +23,10 @@ import java.util.List;
 @Data
 public class BestelRegel {
     @Id
+    @GeneratedValue
     private Long bestelnr;
     @Id
+    @GeneratedValue
     private Long artcode;
     @Column
     private Long aantal;
@@ -35,8 +38,9 @@ public class BestelRegel {
     @JoinColumn(name = "bestelnr")
     private Bestelling bestelling;
 
-    @OneToMany(mappedBy = "bestelRegel")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bestelRegel")
     @JsonIgnore
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<GoedOntvangst> goedOntvangsten = new ArrayList<>();
 
 //    @ManyToOne

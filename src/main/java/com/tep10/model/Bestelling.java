@@ -4,9 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.annotations.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +47,9 @@ public class Bestelling {
 //    @JoinColumn(name = "bestelling_levcode", referencedColumnName = "levcode")
 //    private Leverancier leverancier;
 
-    @OneToMany(mappedBy = "bestelnr")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bestelnr")
     @JsonIgnore
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<BestelRegel> bestelRegels = new ArrayList<>();
 
     public Bestelling(){
