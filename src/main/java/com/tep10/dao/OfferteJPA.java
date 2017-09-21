@@ -1,9 +1,6 @@
-package com.tep10.doa;
+package com.tep10.dao;
 
-import com.tep10.model.Leverancier;
 import com.tep10.model.Offerte;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 

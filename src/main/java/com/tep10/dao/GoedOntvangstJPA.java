@@ -1,4 +1,4 @@
-package com.tep10.doa;
+package com.tep10.dao;
 
 import com.tep10.model.GoedOntvangst;
 import org.springframework.data.jpa.repository.JpaRepository;

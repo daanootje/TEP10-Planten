@@ -1,6 +1,6 @@
 package com.tep10.resource;
 
-import com.tep10.doa.PlantJPA;
+import com.tep10.dao.PlantJPA;
 import com.tep10.model.Plant;
 import com.tep10.resource.interfaceApi.PlantenApi;
 import com.tep10.util.NotFoundException;

@@ -1,6 +1,6 @@
 package com.tep10.resource;
 
-import com.tep10.doa.*;
+import com.tep10.dao.*;
 import com.tep10.model.*;
 import com.tep10.resource.interfaceApi.LeveranciersApi;
 import com.tep10.util.NotFoundException;
@@ -9,12 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.ws.Response;
 import java.sql.Date;
 import java.util.List;
 
@@ -108,6 +106,15 @@ public class Leveranciers implements LeveranciersApi{
         List<GoedOntvangst> goederenOntvangst = goedOntvangstJPA.findGoedOntvangstByBestelRegel_Bestelling_LevcodeAndBestelnrAndArtcode(levcode, bestelnr, artcode);
         return checkNotNull(goederenOntvangst);
     }
+
+    public ResponseEntity<GoedOntvangst>  setGoederenOntvangstAtBestelRegel(@PathVariable Long levcode, @PathVariable Long bestelnr,
+                                                                           @PathVariable Long artcode, @RequestBody GoedOntvangst goedOntvangst) throws NotFoundException {
+        BestelRegel bestelRegel = bestelRegelJPA.findBestelRegelByBestelling_LevcodeAndBestelnrAndArtcode(levcode, bestelnr, artcode);
+        bestelRegel.getGoedOntvangsten().add(goedOntvangst);
+        bestelRegelJPA.save(bestelRegel);
+        return checkNotNull(goedOntvangst);
+    }
+
 
     public ResponseEntity<GoedOntvangst>  getGoedOntvangstFromBestelRegel(@PathVariable Long levcode, @PathVariable Long bestelnr,
                                                                         @PathVariable Long artcode, @PathVariable Date ontv_datum) throws NotFoundException {
