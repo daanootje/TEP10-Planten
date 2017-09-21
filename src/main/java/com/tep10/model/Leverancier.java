@@ -3,8 +3,12 @@ package com.tep10.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +32,7 @@ public class Leverancier {
     private String woonplaats;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "levcode")
+    @Cascade(CascadeType.ALL)
     private List<Bestelling> bestellingen = new ArrayList<>();
 
     @OneToMany(mappedBy = "levcode")

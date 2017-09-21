@@ -17,7 +17,7 @@ class CORSFilter implements Filter{
         HttpServletResponse response = (HttpServletResponse) res;
         response.setHeader("Access-Control-Allow-Origin", "http://localhost:8081");
         response.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+        response.setHeader("Access-Control-Allow-Headers", "x-requested-with, content-type");
         response.setHeader("Access-Control-Max-Age", "3600");
         chain.doFilter(req, res);
     }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -20,14 +21,20 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public class Bestelling {
+
     @Id
+    @GeneratedValue
     private Long bestelnr;
+
     @Column
     private Long levcode;
+
     @Column
     private Date besteldat;
+
     @Column
     private Date leverdat;
+
     @Column(columnDefinition="Decimal(6,2) default '100.00'")
     private Double bedrag;
     @Column
