@@ -26,20 +26,21 @@ public class Leveranciers implements LeveranciersApi{
 
     private static final Logger log = LoggerFactory.getLogger(Leveranciers.class);
 
-    @Autowired
-    private LeverancierJPA leverancierJPA;
+    private final LeverancierJPA leverancierJPA;
+    private final OfferteJPA offerteJPA;
+    private final BestellingJPA bestellingJPA;
+    private final BestelRegelJPA bestelRegelJPA;
+    private final GoedOntvangstJPA goedOntvangstJPA;
 
     @Autowired
-    private OfferteJPA offerteJPA;
-
-    @Autowired
-    private BestellingJPA bestellingJPA;
-
-    @Autowired
-    private BestelRegelJPA bestelRegelJPA;
-
-    @Autowired
-    private GoedOntvangstJPA goedOntvangstJPA;
+    public Leveranciers (LeverancierJPA leverancierJPA, OfferteJPA offerteJPA, BestellingJPA bestellingJPA,
+                         BestelRegelJPA bestelRegelJPA, GoedOntvangstJPA goedOntvangstJPA) {
+        this.leverancierJPA = leverancierJPA;
+        this.offerteJPA = offerteJPA;
+        this.bestellingJPA = bestellingJPA;
+        this.bestelRegelJPA = bestelRegelJPA;
+        this.goedOntvangstJPA = goedOntvangstJPA;
+    }
 
     public ResponseEntity<Leverancier> getLeverancier(@PathVariable(required = false) Long levcode) throws NotFoundException {
         Leverancier leverancier = leverancierJPA.findLeverancierByLevcode(levcode);
@@ -71,9 +72,13 @@ public class Leveranciers implements LeveranciersApi{
         if (leverancierJPA.findLeverancierByLevcode(levcode) == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        Leverancier leverancier = leverancierJPA.findLeverancierByLevcode(levcode);
-        leverancier.getBestellingen().add(bestelling);
-        leverancierJPA.save(leverancier);
+        if (bestellingJPA.findBestellingByLevcodeAndBestelnr(levcode,bestelling.getBestelnr()) == null ) {
+            Leverancier leverancier = leverancierJPA.findLeverancierByLevcode(levcode);
+            leverancier.getBestellingen().add(bestelling);
+            leverancierJPA.save(leverancier);
+        } else {
+            bestellingJPA.save(bestelling);
+        }
         return checkNotNull(bestelling);
     }
 
@@ -114,7 +119,6 @@ public class Leveranciers implements LeveranciersApi{
         bestelRegelJPA.save(bestelRegel);
         return checkNotNull(goedOntvangst);
     }
-
 
     public ResponseEntity<GoedOntvangst>  getGoedOntvangstFromBestelRegel(@PathVariable Long levcode, @PathVariable Long bestelnr,
                                                                         @PathVariable Long artcode, @PathVariable Date ontv_datum) throws NotFoundException {

@@ -17,8 +17,12 @@ import static com.tep10.resource.Validator.checkNotNull;
 @RestController
 public class Planten implements PlantenApi {
 
+    private final PlantJPA plantJPA;
+
     @Autowired
-    private PlantJPA plantJPA;
+    public Planten (PlantJPA plantJPA) {
+        this.plantJPA = plantJPA;
+    }
 
     public ResponseEntity<Plant> getPlant(@PathVariable Long artcode) throws NotFoundException {
         Plant plant = plantJPA.findPlantByArtcode(artcode);
